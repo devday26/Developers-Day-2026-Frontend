@@ -151,14 +151,14 @@ export default function ModuleCategories() {
           transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
           className="flex justify-between items-center"
         >
-          <Button
+          {/* <Button
             as={Link}
             href="/modules"
             className="bg-red-primary hover:bg-red-700 text-white font-bold px-6 py-3"
             radius="none"
           >
             VISIT:_ALL_MODULES
-          </Button>
+          </Button> */}
           <div className="flex gap-2">
             <div className="w-2 h-2 bg-red-primary rounded-none" />
             <div className="w-2 h-2 bg-red-primary rounded-none" />
