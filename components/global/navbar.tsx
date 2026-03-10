@@ -87,7 +87,7 @@ export default function AppNavbar() {
       height="5rem"
       classNames={{
         wrapper: "container mx-auto px-4 md:px-6 h-20",
-        item: "text-white data-[active=true]:text-white",
+        item: "text-white data-[active=true]:text-white font-mono",
         menu: "bg-dark-red",
       }}
     >
