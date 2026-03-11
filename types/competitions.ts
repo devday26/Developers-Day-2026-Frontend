@@ -4,6 +4,9 @@ export interface CompetitionWithCategory {
   category: string;
   description: string | null;
   fee: number;
+  capacityLimit: number;
+  earlyBirdFee:number;
+  earlyBirdLimit: number;
   minTeamSize: number;
   maxTeamSize: number;
 }

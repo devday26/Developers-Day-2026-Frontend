@@ -339,6 +339,13 @@ export default function RegistrationForm() {
         (comp) => comp.id === formData.competitionId
     );
 
+    const normalFee = selectedCompetition?.fee ?? 0;
+    const earlyBirdFee = selectedCompetition?.earlyBirdFee ?? 0;
+    const earlyBirdLimit = selectedCompetition?.earlyBirdLimit ?? 0;
+
+    const discountApplied =
+        earlyBirdLimit > 0 ? Math.max(0, normalFee - earlyBirdFee) : 0;
+
     if (isSubmitted) {
         const handleDownloadReceipt = async () => {
             const el = document.getElementById("registration-receipt-capture");
@@ -376,8 +383,8 @@ export default function RegistrationForm() {
                         leaderName={formData.leaderName}
                         moduleName={selectedCompetition?.name}
                         teamMembers={teamMembersCount}
-                        moduleFee={selectedCompetition ? Number(selectedCompetition.fee) : 0}
-                        discount={0}
+                        moduleFee={normalFee}
+                        discount={discountApplied}
                         paymentStatus="SUBMITTED"
                         onDownloadRulebook={handleDownloadRulebook}
                         onDownloadReceipt={handleDownloadReceipt}
@@ -451,7 +458,7 @@ export default function RegistrationForm() {
                                 />
                             </div>
                             <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">02 (OPTIONAL)</label>
+                                <label className="text-red-primary text-xs font-mono mb-2 block">02</label>
                                 <Select
                                     placeholder="FILTER_BY_CATEGORY"
                                     selectedKeys={selectedCategory ? [selectedCategory] : []}
@@ -526,7 +533,15 @@ export default function RegistrationForm() {
                                                 </span>
                                                 <span className="text-[10px] text-gray-400">
                                                     {comp.category} • {comp.minTeamSize}–
-                                                    {comp.maxTeamSize} members • PKR {comp.fee}
+                                                    {comp.maxTeamSize} members •{" "}
+                                                    {comp.earlyBirdLimit > 0 ? (
+                                                        <>
+                                                            <span className="text-red-primary line-through">PKR {comp.fee}</span>{" "}
+                                                            <span className="text-white font-semibold">PKR {comp.earlyBirdFee}</span>
+                                                        </>
+                                                    ) : (
+                                                        <>PKR {comp.fee}</>
+                                                    )}
                                                 </span>
                                             </div>
                                         </SelectItem>
@@ -943,8 +958,8 @@ export default function RegistrationForm() {
                     leaderName={formData.leaderName}
                     moduleName={selectedCompetition?.name}
                     teamMembers={teamMembersCount}
-                    moduleFee={selectedCompetition ? Number(selectedCompetition.fee) : 0}
-                    discount={0}
+                    moduleFee={normalFee}
+                    discount={discountApplied}
                     paymentStatus={paymentStatus}
                     onDownloadRulebook={handleDownloadRulebook}
                     onConfirmEntry={handleSubmit}
