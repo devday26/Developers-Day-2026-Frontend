@@ -42,6 +42,10 @@ export async function submitPublicRegistration(
     formData.append("leaderInstitution", payload.leaderInstitution);
   }
 
+  if (payload.leaderRollNumber) {
+    formData.append("leaderRollNumber", payload.leaderRollNumber);
+  }
+
   if (payload.members.length > 0) {
     formData.append("members", JSON.stringify(payload.members));
   }

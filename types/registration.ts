@@ -4,6 +4,7 @@ export interface TeamMemberInput {
   cnic: string;
   phone?: string;
   institution?: string;
+  rollNumber?: string;
 }
 
 export interface PublicRegistrationRequest {
@@ -15,6 +16,7 @@ export interface PublicRegistrationRequest {
   leaderCnic: string;
   leaderPhone?: string;
   leaderInstitution?: string;
+  leaderRollNumber?: string;
   members: TeamMemberInput[];
   paymentScreenshot: File;
   isEarlyBird: boolean;

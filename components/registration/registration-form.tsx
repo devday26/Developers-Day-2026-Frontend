@@ -25,6 +25,7 @@ interface FormData {
     leaderEmail: string;
     leaderPhone: string;
     leaderCnic: string;
+    leaderRollNumber: string;
     members: TeamMemberInput[];
     paymentScreenshot: File | null;
 }
@@ -35,11 +36,13 @@ const EMPTY_MEMBER: TeamMemberInput = {
     cnic: "",
     phone: "",
     institution: "",
+    rollNumber: "",
 };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^03\d{9}$/;
 const cnicDisplayRegex = /^\d{5}-\d{7}-\d{1}$/;
+const rollNumberRegex = /^\d{2}[IPLKMF]\d{4}$/;
 
 function normalizeCnic(cnic: string): string {
     return cnic.replace(/[^0-9]/g, "");
@@ -62,6 +65,10 @@ function formatCnicDisplay(value: string): string {
     }
 
     return `${digits.slice(0, 5)}-${digits.slice(5, 12)}-${digits.slice(12)}`;
+}
+
+function formatRollNumberInput(value: string): string {
+    return value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7);
 }
 
 function normalizeInstitutionName(value: string): string {
@@ -94,6 +101,7 @@ export default function RegistrationForm() {
         leaderEmail: "",
         leaderPhone: "",
         leaderCnic: "",
+        leaderRollNumber: "",
         members: [{ ...EMPTY_MEMBER }],
         paymentScreenshot: null,
     });
@@ -194,6 +202,10 @@ export default function RegistrationForm() {
         });
     };
 
+    const requiresRollNumbers =
+        normalizeInstitutionName(formData.institutionName) ===
+        normalizeInstitutionName(INSTITUTION_OPTIONS[0] || "");
+
     const addMember = () => {
         const selectedCompetition = competitions.find(
             (comp) => comp.id === formData.competitionId
@@ -253,6 +265,15 @@ export default function RegistrationForm() {
             return "Leader CNIC must contain 13 digits in the format 12345-1234567-1.";
         }
 
+        const leaderRollNumber = formData.leaderRollNumber.trim();
+        if (requiresRollNumbers && !leaderRollNumber) {
+            return "Leader roll number is required.";
+        }
+
+        if (requiresRollNumbers && !rollNumberRegex.test(leaderRollNumber)) {
+            return "Leader roll number must be in the format 22K4581, where the letter can only be I, P, L, K, M, or F.";
+        }
+
         return null;
     };
 
@@ -281,6 +302,15 @@ export default function RegistrationForm() {
             const phone = member.phone?.trim();
             if (phone && !phoneRegex.test(phone)) {
                 return `Member ${number}: phone must be in the format 03XXXXXXXXX (e.g. 03363277876).`;
+            }
+
+            const rollNumber = member.rollNumber?.trim() || "";
+            if (requiresRollNumbers && !rollNumber) {
+                return `Member ${number}: roll number is required.`;
+            }
+
+            if (requiresRollNumbers && !rollNumberRegex.test(rollNumber)) {
+                return `Member ${number}: roll number must be in the format 22K4581, where the letter can only be I, P, L, K, M, or F.`;
             }
         }
 
@@ -352,12 +382,14 @@ export default function RegistrationForm() {
                 leaderCnic: normalizeCnic(formData.leaderCnic),
                 leaderPhone: formData.leaderPhone.trim() || undefined,
                 leaderInstitution: formData.institutionName.trim() || undefined,
+                leaderRollNumber: formData.leaderRollNumber.trim() || undefined,
                 members: validMembers.map((m) => ({
                     fullName: m.fullName.trim(),
                     email: m.email.trim(),
                     cnic: normalizeCnic(m.cnic || ""),
                     phone: m.phone?.trim() || undefined,
                     institution: m.institution?.trim() || undefined,
+                    rollNumber: m.rollNumber?.trim() || undefined,
                 })),
                 paymentScreenshot: formData.paymentScreenshot,
                 isEarlyBird: (latestCompetitionDetail?.earlyBirdLimit ?? 0) > 0,
@@ -697,7 +729,7 @@ export default function RegistrationForm() {
                                 radius="none"
                             />
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className={`grid grid-cols-1 md:grid-cols-2 ${requiresRollNumbers ? "lg:grid-cols-3" : ""} gap-6`}>
                             <Input
                                 placeholder="PHONE_NUMBER"
                                 type="tel"
@@ -726,6 +758,21 @@ export default function RegistrationForm() {
                                 }}
                                 radius="none"
                             />
+                            {requiresRollNumbers && (
+                                <Input
+                                    placeholder="ROLL_NUMBER (e.g. 22K4581)"
+                                    type="text"
+                                    value={formData.leaderRollNumber}
+                                    onValueChange={(value) =>
+                                        updateFormData("leaderRollNumber", formatRollNumberInput(value))
+                                    }
+                                    classNames={{
+                                        input: "bg-dark-red text-white placeholder:text-gray-600 uppercase",
+                                        inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
+                                    }}
+                                    radius="none"
+                                />
+                            )}
                         </div>
                     </div>
                 )}
@@ -774,7 +821,7 @@ export default function RegistrationForm() {
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className={`grid grid-cols-1 md:grid-cols-2 ${requiresRollNumbers ? "lg:grid-cols-4" : "lg:grid-cols-3"} gap-4`}>
                                     <Input
                                         placeholder="CNIC"
                                         type="text"
@@ -803,6 +850,21 @@ export default function RegistrationForm() {
                                         }}
                                         radius="none"
                                     />
+                                    {requiresRollNumbers && (
+                                        <Input
+                                            placeholder="ROLL_NUMBER (e.g. 22K4581)"
+                                            type="text"
+                                            value={member.rollNumber || ""}
+                                            onValueChange={(value) =>
+                                                updateMember(index, "rollNumber", formatRollNumberInput(value))
+                                            }
+                                            classNames={{
+                                                input: "bg-dark-red text-white placeholder:text-gray-600 uppercase",
+                                                inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
+                                            }}
+                                            radius="none"
+                                        />
+                                    )}
                                     <InstitutionAutocomplete
                                         placeholder="INSTITUTION (OPTIONAL)"
                                         value={member.institution || ""}
