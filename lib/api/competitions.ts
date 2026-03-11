@@ -1,7 +1,6 @@
 import type { CompetitionWithCategory } from "@/types/competitions";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const API_ROOT = API_BASE_URL?.replace(/\/api\/?$/, "") || API_BASE_URL;
+const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 if (!API_ROOT) {
   // eslint-disable-next-line no-console
