@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/button";
-import { CheckCircleIcon, DocumentArrowDownIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 
 interface RegistrationReceiptProps {
     teamName?: string;
@@ -13,6 +13,9 @@ interface RegistrationReceiptProps {
     discount?: number;
     paymentStatus?: "SUBMITTED" | "PENDING" | "NONE";
     onDownloadRulebook?: () => void;
+    onConfirmEntry?: () => void;
+    onDownloadReceipt?: () => void;
+    isSubmitting?: boolean;
 }
 
 export default function RegistrationReceipt({
@@ -24,6 +27,9 @@ export default function RegistrationReceipt({
     discount = 0,
     paymentStatus = "NONE",
     onDownloadRulebook,
+    onConfirmEntry,
+    onDownloadReceipt,
+    isSubmitting = false,
 }: RegistrationReceiptProps) {
     const totalFee = moduleFee - discount;
 
@@ -52,7 +58,7 @@ export default function RegistrationReceipt({
     }, []);
 
     return (
-        <div className="bg-dark-red-4 border-2 border-red-primary p-6 md:p-8 relative font-mono">
+        <div className="bg-dark-red-4  p-6 md:p-8 relative font-mono">
             {/* Corner Accents */}
             <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-red-primary"></div>
             <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-red-primary">
@@ -72,7 +78,7 @@ export default function RegistrationReceipt({
                     Timestamp: {timestamp.date} // {timestamp.time} PST
                 </p>
                 <p className="text-red-primary text-xs md:text-sm">
-                    Module_Date_Reserved: 12-04-2025 // 9:00:00 AM PST
+                    Module_Date_Reserved: 16-04-2025 // 9:00:00 AM PST
                 </p>
             </div>
 
@@ -127,13 +133,12 @@ export default function RegistrationReceipt({
                     <div className="flex justify-between items-center py-4 border-b-2 border-[#392828]">
                         <span className="text-gray-500 text-sm uppercase">PAYMENT_STATUS</span>
                         <span
-                            className={`text-base font-bold uppercase ${
-                                paymentStatus === "SUBMITTED"
-                                    ? "text-green-500"
-                                    : paymentStatus === "PENDING"
+                            className={`text-base font-bold uppercase ${paymentStatus === "SUBMITTED"
+                                ? "text-green-500"
+                                : paymentStatus === "PENDING"
                                     ? "text-yellow-500"
                                     : "text-gray-500"
-                            }`}
+                                }`}
                         >
                             {paymentStatus === "NONE" ? "---" : paymentStatus}
                         </span>
@@ -149,25 +154,32 @@ export default function RegistrationReceipt({
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 pt-6 border-t border-gray-800">
-                <Button
-                    className="bg-red-primary hover:bg-red-700 text-white font-mono text-sm h-14 uppercase"
-                    radius="none"
-                    startContent={<CheckCircleIcon className="w-5 h-5" />}
-                    isDisabled={!teamName || !leaderName || !moduleName}
-                >
-                    CONFIRM_ENTRY
-                </Button>
-                <Button
-                    className="bg-gray-800 hover:bg-gray-700 text-white font-mono text-sm h-14 uppercase"
-                    radius="none"
-                    startContent={<DocumentArrowDownIcon className="w-5 h-5" />}
-                    onPress={onDownloadRulebook}
-                    isDisabled={!moduleName}
-                >
-                    RULEBOOK.PDF
-                </Button>
-            </div>
+            {(onConfirmEntry || onDownloadReceipt) && (
+                <div data-no-capture className="grid grid-cols-1 gap-4 mt-8 pt-6 border-t border-gray-800">
+                    {onConfirmEntry && (
+                        <Button
+                            className="bg-red-primary hover:bg-red-700 text-white font-mono text-sm h-14 uppercase"
+                            radius="none"
+                            startContent={!isSubmitting ? <CheckCircleIcon className="w-5 h-5" /> : undefined}
+                            isDisabled={!teamName || !leaderName || !moduleName || isSubmitting}
+                            isLoading={isSubmitting}
+                            onPress={onConfirmEntry}
+                        >
+                            {isSubmitting ? "SUBMITTING..." : "CONFIRM_ENTRY"}
+                        </Button>
+                    )}
+                    {onDownloadReceipt && (
+                        <Button
+                            className="bg-gray-800 hover:bg-gray-700 text-white font-mono text-sm h-14 uppercase"
+                            radius="none"
+                            startContent={<ArrowDownTrayIcon className="w-5 h-5" />}
+                            onPress={onDownloadReceipt}
+                        >
+                            DOWNLOAD_RECEIPT
+                        </Button>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

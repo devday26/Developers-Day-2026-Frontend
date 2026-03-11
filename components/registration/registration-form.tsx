@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
@@ -66,6 +66,8 @@ export default function RegistrationForm() {
     const [activeTab, setActiveTab] = useState<TabType>("team");
     const [paymentPreviewUrl, setPaymentPreviewUrl] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const receiptRef = useRef<HTMLDivElement>(null);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
     const [competitions, setCompetitions] = useState<CompetitionWithCategory[]>([]);
@@ -300,6 +302,7 @@ export default function RegistrationForm() {
                 "Registration submitted successfully. You will receive a confirmation email soon.";
             setSubmitSuccess(successMessage);
             toast.success(successMessage);
+            setIsSubmitted(true);
         } catch (error: any) {
             const message =
                 error?.message || "Failed to submit registration. Please try again.";
@@ -336,6 +339,54 @@ export default function RegistrationForm() {
         (comp) => comp.id === formData.competitionId
     );
 
+    if (isSubmitted) {
+        const handleDownloadReceipt = async () => {
+            const el = document.getElementById("registration-receipt-capture");
+            if (!el) return;
+            const { toPng } = await import("html-to-image");
+            const dataUrl = await toPng(el, {
+                pixelRatio: 2,
+                filter: (node) => !(node instanceof HTMLElement && node.hasAttribute("data-no-capture")),
+            });
+            const link = document.createElement("a");
+            link.download = `receipt-${formData.teamName || "registration"}.png`;
+            link.href = dataUrl;
+            link.click();
+        };
+
+        return (
+            <div className="space-y-8 animate-fade-in">
+                {/* Success Banner */}
+                <div className="bg-dark-red-1 border border-green-600/50 p-6 md:p-8 relative overflow-hidden">
+                    {/* Green glow accent */}
+                    <div className="absolute top-0 left-0 h-full w-[6px] bg-green-500" />
+                    <div className="pl-4">
+                        <p className="text-green-400 text-xs font-mono mb-2 tracking-widest uppercase">STATUS :: REGISTRATION_COMPLETE</p>
+                        <h2 className="text-2xl md:text-3xl font-bold text-white uppercase mb-2">Entry Confirmed</h2>
+                        <p className="text-gray-400 text-sm md:text-base">
+                            Your registration has been submitted successfully. A confirmation email will be sent to you shortly.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Completed Receipt */}
+                <div id="registration-receipt-capture">
+                    <RegistrationReceipt
+                        teamName={formData.teamName}
+                        leaderName={formData.leaderName}
+                        moduleName={selectedCompetition?.name}
+                        teamMembers={teamMembersCount}
+                        moduleFee={selectedCompetition ? Number(selectedCompetition.fee) : 0}
+                        discount={0}
+                        paymentStatus="SUBMITTED"
+                        onDownloadRulebook={handleDownloadRulebook}
+                        onDownloadReceipt={handleDownloadReceipt}
+                    />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 mb-8">
@@ -346,7 +397,7 @@ export default function RegistrationForm() {
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`bg-dark-red-1 relative pl-4 md:pl-6 pr-2 md:pr-4 py-3 md:py-6 text-left transition-all
+                            className={`cursor-pointer bg-dark-red-1 relative pl-4 md:pl-6 pr-2 md:pr-4 py-3 md:py-6 text-left transition-all
         ${active
                                     ? "shadow-[0_0_20px_rgba(215,29,34,0.6)]"
                                     : ""}
@@ -832,11 +883,19 @@ export default function RegistrationForm() {
                         className="bg-red-primary hover:bg-red-700 text-white font-mono disabled:opacity-60 disabled:cursor-not-allowed"
                         radius="none"
                         isDisabled={isSubmitting}
-                        isLoading={isSubmitting && activeTab === "payment"}
                         onPress={() => {
                             const currentIndex = tabs.findIndex((t) => t.id === activeTab);
+
                             if (activeTab === "payment") {
-                                handleSubmit();
+                                // Validate payment screenshot first
+                                if (!formData.paymentScreenshot) {
+                                    const message = "Please upload the payment screenshot before reviewing.";
+                                    setSubmitError(message);
+                                    toast.error(message);
+                                    return;
+                                }
+                                // Scroll to receipt
+                                receiptRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                                 return;
                             }
 
@@ -872,22 +931,26 @@ export default function RegistrationForm() {
                             }
                         }}
                     >
-                        {activeTab === "payment" ? (isSubmitting ? "SUBMITTING..." : "SUBMIT") : "NEXT →"}
+                        {activeTab === "payment" ? "REVIEW RECEIPT →" : "NEXT →"}
                     </Button>
                 </div>
             </div>
 
             {/* Registration Receipt */}
-            <RegistrationReceipt
-                teamName={formData.teamName}
-                leaderName={formData.leaderName}
-                moduleName={formData.competitionId}
-                teamMembers={teamMembersCount}
-                moduleFee={selectedCompetition ? Number(selectedCompetition.fee) : 0}
-                discount={0}
-                paymentStatus={paymentStatus}
-                onDownloadRulebook={handleDownloadRulebook}
-            />
+            <div ref={receiptRef} className="scroll-mt-8">
+                <RegistrationReceipt
+                    teamName={formData.teamName}
+                    leaderName={formData.leaderName}
+                    moduleName={selectedCompetition?.name}
+                    teamMembers={teamMembersCount}
+                    moduleFee={selectedCompetition ? Number(selectedCompetition.fee) : 0}
+                    discount={0}
+                    paymentStatus={paymentStatus}
+                    onDownloadRulebook={handleDownloadRulebook}
+                    onConfirmEntry={handleSubmit}
+                    isSubmitting={isSubmitting}
+                />
+            </div>
         </div>
     );
 }
