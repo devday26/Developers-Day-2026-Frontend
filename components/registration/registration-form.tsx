@@ -11,7 +11,7 @@ import InstitutionAutocomplete from "./institution-autocomplete";
 import { submitPublicRegistration } from "@/lib/api/registration";
 import type { TeamMemberInput } from "@/types/registration";
 import type { CompetitionWithCategory } from "@/types/competitions";
-import { fetchCompetitionsWithCategory, fetchCompetitionById } from "@/lib/api/competitions";
+import { fetchCompetitionsWithCategory } from "@/lib/api/competitions";
 import { INSTITUTION_OPTIONS } from "@/config/institutions";
 
 type TabType = "team" | "leader" | "members" | "payment";
@@ -88,10 +88,6 @@ export default function RegistrationForm() {
     const [competitionError, setCompetitionError] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [institutionOptions, setInstitutionOptions] = useState<string[]>(INSTITUTION_OPTIONS);
-    const [amountDue, setAmountDue] = useState<number | null>(null);
-    const [isLoadingAmountDue, setIsLoadingAmountDue] = useState(false);
-    const [isEarlyBirdActive, setIsEarlyBirdActive] = useState(false);
-    const [latestCompetitionDetail, setLatestCompetitionDetail] = useState<CompetitionWithCategory | null>(null);
     const [formData, setFormData] = useState<FormData>({
         teamName: "",
         competitionId: "",
@@ -105,33 +101,6 @@ export default function RegistrationForm() {
         members: [{ ...EMPTY_MEMBER }],
         paymentScreenshot: null,
     });
-
-    useEffect(() => {
-        if (activeTab !== "payment" || !formData.competitionId) return;
-
-        let isMounted = true;
-        setIsLoadingAmountDue(true);
-        setAmountDue(null);
-        setIsEarlyBirdActive(false);
-        setLatestCompetitionDetail(null);
-
-        (async () => {
-            try {
-                const comp = await fetchCompetitionById(formData.competitionId);
-                if (!isMounted) return;
-                setLatestCompetitionDetail(comp);
-                const earlyBird = comp.earlyBirdLimit > 0;
-                setIsEarlyBirdActive(earlyBird);
-                setAmountDue(earlyBird ? comp.earlyBirdFee : comp.fee);
-            } catch {
-                // silently fall back — amount due stays null
-            } finally {
-                if (isMounted) setIsLoadingAmountDue(false);
-            }
-        })();
-
-        return () => { isMounted = false; };
-    }, [activeTab, formData.competitionId]);
 
     useEffect(() => {
         let isMounted = true;
@@ -392,7 +361,7 @@ export default function RegistrationForm() {
                     rollNumber: m.rollNumber?.trim() || undefined,
                 })),
                 paymentScreenshot: formData.paymentScreenshot,
-                isEarlyBird: (latestCompetitionDetail?.earlyBirdLimit ?? 0) > 0,
+                isEarlyBird: earlyBirdLimit > 0,
             });
 
             const successMessage =
@@ -439,9 +408,13 @@ export default function RegistrationForm() {
     const normalFee = selectedCompetition?.fee ?? 0;
     const earlyBirdFee = selectedCompetition?.earlyBirdFee ?? 0;
     const earlyBirdLimit = selectedCompetition?.earlyBirdLimit ?? 0;
+    const isEarlyBirdActive = earlyBirdLimit > 0;
+    const amountDue = selectedCompetition
+        ? (isEarlyBirdActive ? earlyBirdFee : normalFee)
+        : null;
 
     const discountApplied =
-        earlyBirdLimit > 0 ? Math.max(0, normalFee - earlyBirdFee) : 0;
+        isEarlyBirdActive ? Math.max(0, normalFee - earlyBirdFee) : 0;
 
     if (isSubmitted) {
         const handleDownloadReceipt = async () => {
@@ -911,9 +884,7 @@ export default function RegistrationForm() {
                                     </p>
                                 </div>
                                 <div className="text-right">
-                                    {isLoadingAmountDue ? (
-                                        <p className="text-gray-500 text-sm font-mono animate-pulse">LOADING...</p>
-                                    ) : amountDue !== null ? (
+                                    {amountDue !== null ? (
                                         <p className="text-white text-2xl md:text-3xl font-bold font-mono">
                                             PKR <span className="text-red-primary">{amountDue}</span>
                                         </p>

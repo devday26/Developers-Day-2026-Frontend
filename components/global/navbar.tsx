@@ -94,24 +94,26 @@ export default function AppNavbar() {
       {/* Brand */}
       <NavbarContent justify="start">
         <NavbarBrand>
-          <motion.div
-            key={pathname}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex items-center gap-2"
-          >
-            <Image
-              src="/logo.png"
-              alt="DevDay Logo"
-              width={33}
-              height={49}
-              className="object-contain"
-            />
-            <p className="font-bold text-white text-lg tracking-[0.18em]">
-              DEVDAY &apos;26
-            </p>
-          </motion.div>
+          <Link href="/" className="focus:outline-none">
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+              className="flex items-center gap-2"
+            >
+              <Image
+                src="/logo.png"
+                alt="DevDay Logo"
+                width={33}
+                height={49}
+                className="object-contain"
+              />
+              <p className="font-bold text-white text-lg tracking-[0.18em]">
+                DEVDAY &apos;26
+              </p>
+            </motion.div>
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
