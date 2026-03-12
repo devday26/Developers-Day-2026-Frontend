@@ -49,7 +49,7 @@ export default function CompetitionCard({
           {/* Team Size */}
           <div className="bg-[#1A1A1A] p-3 w-full border border-[#FFFFFF0D] border-l-2 border-l-[var(--color,#2563EB)] flex flex-col items-baseline gap-2">
             <UserGroupIcon className="w-4 h-4 text-[var(--color,#2563EB)]" />
-            <span className="text-white text-sm">TEAM: {maxTeamSize == 1 ? 'Individual' : `${minTeamSize}-${maxTeamSize} Members`}</span>
+            <span className="text-white text-sm">TEAM: {maxTeamSize == 1 ? 'Individual' : (maxTeamSize == minTeamSize ? `${maxTeamSize} Members` : `${minTeamSize}-${maxTeamSize} Members`)}</span>
           </div>
 
           {/* Fees */}

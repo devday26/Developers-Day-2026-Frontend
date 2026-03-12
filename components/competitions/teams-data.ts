@@ -58,9 +58,9 @@ const teamsData = {
 
 const categoryData = {
     business: [
-        { role: "Director", name: "Huzaifa Qadri", studentId: "23K-5514", initials: "HQ", linkedin: "" },
-        { role: "Assistant Director", name: "Amna Saeed", studentId: "23K-5547", initials: "AS", linkedin: "" },
-        { role: "Assistant Director", name: "Abdul Rafay", studentId: "23K-5525", initials: "AR", linkedin: "" }
+        { role: "Director", name: "Huzaifa Qadri", studentId: "23K-5514", initials: "HQ", linkedin: "https://www.linkedin.com/in/huzaifa-qadri-77180b294/" },
+        { role: "Assistant Director", name: "Amna Saeed", studentId: "23K-5547", initials: "AS", linkedin: "https://www.linkedin.com/in/amna-saeed-7a1504295/" },
+        { role: "Assistant Director", name: "Abdul Rafay", studentId: "23K-5525", initials: "AR", linkedin: "https://www.linkedin.com/in/rafay-mughal-54a86a289/" }
     ],
 
     "electrical-eng": [
@@ -79,13 +79,13 @@ const categoryData = {
         { role: "Assistant Director", name: "Asra Fadoo", studentId: "24K-0667", initials: "AF", linkedin: "https://www.linkedin.com/in/asra-fadoo-373461298/" }
     ],
     "coding": [
-        { role: "Category Head", name: "M. Taaha", studentId: "23K-0548", initials: "MT", linkedin: "" },
-        { role: "Co-Head", name: "Muhammad Raahim", studentId: "23K-0729", initials: "MR", linkedin: "" }
+        { role: "Category Head", name: "M. Taaha", studentId: "23K-0548", initials: "MT", linkedin: "https://www.linkedin.com/in/muhammad-taahaatfast/" },
+        { role: "Co-Head", name: "Muhammad Raahim", studentId: "23K-0729", initials: "MR", linkedin: "https://www.linkedin.com/in/muhammad-raahim-munawwar-90a259263/" }
     ],
 
     "software-eng": [
-        { role: "Category Head", name: "Zohair Shamsi", studentId: "23K-0558", initials: "ZS", linkedin: "" },
-        { role: "Co-Head", name: "Umer Khan", studentId: "23K-0798", initials: "UK", linkedin: "" }
+        { role: "Category Head", name: "Zohair Shamsi", studentId: "23K-0558", initials: "ZS", linkedin: "https://www.linkedin.com/in/zohairshamsi/" },
+        { role: "Co-Head", name: "Umer Khan", studentId: "23K-0798", initials: "UK", linkedin: "https://www.linkedin.com/in/umer-khan10/" }
     ],
 
     "dev-design": [
@@ -94,13 +94,13 @@ const categoryData = {
     ],
 
     "tech-quest": [
-        { role: "Category Head", name: "Sana Munir", studentId: "24K-0573", initials: "SM", linkedin: "" },
-        { role: "Co-Head", name: "Adeena Asif", studentId: "24K-0628", initials: "AA", linkedin: "" }
+        { role: "Category Head", name: "Sana Munir", studentId: "24K-0573", initials: "SM", linkedin: "https://www.linkedin.com/in/sana-munir-alam-129945323/" },
+        { role: "Co-Head", name: "Adeena Asif", studentId: "24K-0628", initials: "AA", linkedin: "https://www.linkedin.com/in/adeena-asif-837a08345/" }
     ],
 
     "ai-data": [
-        { role: "Category Head", name: "Falah Zainab", studentId: "22K-4491", initials: "FZ", linkedin: "" },
-        { role: "Co-Head", name: "Mudasir", studentId: "22K-8732", initials: "M", linkedin: "" }
+        { role: "Category Head", name: "Falah Zainab", studentId: "22K-4491", initials: "FZ", linkedin: "https://www.linkedin.com/in/falah-zainab-9b7ab8344/" },
+        { role: "Co-Head", name: "Mudasir", studentId: "22K-8732", initials: "M", linkedin: "https://www.linkedin.com/in/mudasir-naeem-698679303/" }
     ]
 };
 

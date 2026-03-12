@@ -83,7 +83,7 @@ async function getCompetitions() {
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/competitions/public`,
-            { next: { revalidate: 3600 } }
+            { next: { revalidate: 600 } }
         );
 
         if (!res.ok) {
