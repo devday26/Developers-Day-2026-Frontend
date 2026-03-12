@@ -124,8 +124,8 @@ export default function RegistrationReceipt({
                     </div>
 
                     <div className="flex justify-between items-center py-4 border-b-2 border-[#392828]">
-                        <span className="text-gray-500 text-sm uppercase">Early_Bird</span>
-                        <span className="text-white text-base font-bold">
+                        <span className="text-gray-500 text-sm uppercase">Early_Bird_Off</span>
+                        <span className={`text-base ${discount > 0 ? 'text-green-500' : 'text-white'} font-bold`}>
                             {discount > 0 ? `${discount} PKR` : "NONE"}
                         </span>
                     </div>
@@ -153,9 +153,19 @@ export default function RegistrationReceipt({
                 </div>
             </div>
 
+            {/* Thank You Note (Always visible in capture, always visible on screen) */}
+            <div className="mt-8 pt-6 border-t border-gray-800 text-center">
+                <p className="text-white text-sm md:text-base font-bold tracking-wider mb-2">
+                    THANK_YOU_FOR_REGISTERING FOR DEV_DAY_2026
+                </p>
+                <p className="text-gray-400 text-xs md:text-sm max-w-md mx-auto">
+                    You will receive a confirmation email once your payment is verified. Keep this receipt for your records.
+                </p>
+            </div>
+
             {/* Action Buttons */}
             {(onConfirmEntry || onDownloadReceipt) && (
-                <div data-no-capture className="grid grid-cols-1 gap-4 mt-8 pt-6 border-t border-gray-800">
+                <div data-no-capture className="grid grid-cols-1 gap-4 mt-6">
                     {onConfirmEntry && (
                         <Button
                             className="bg-red-primary hover:bg-red-700 text-white font-mono text-sm h-14 uppercase"

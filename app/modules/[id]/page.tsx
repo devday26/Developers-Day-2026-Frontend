@@ -80,22 +80,22 @@ const modules = [
 ];
 
 async function getCompetitions() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/competitions/public`,
-      { next: { revalidate: 3600 } }
-    );
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/competitions/public`,
+            { next: { revalidate: 3600 } }
+        );
 
-    if (!res.ok) {
-      throw new Error(`API returned ${res.status}: ${res.statusText}`);
+        if (!res.ok) {
+            throw new Error(`API returned ${res.status}: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        return data.data;
+    } catch (err) {
+        console.error("getCompetitions failed:", err);
+        throw err; // let error.tsx catch it
     }
-
-    const data = await res.json();
-    return data.data;
-  } catch (err) {
-    console.error("getCompetitions failed:", err);
-    throw err; // let error.tsx catch it
-  }
 }
 
 const idToCategoryMap: { [key: string]: string } = {
