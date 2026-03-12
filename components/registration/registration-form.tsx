@@ -212,7 +212,7 @@ export default function RegistrationForm() {
             }
         }
 
-        if (formData.members.length >= 4) return;
+        if (formData.members.length >= 7) return;
 
         setFormData((prev) => ({
             ...prev,

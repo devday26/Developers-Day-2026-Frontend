@@ -72,7 +72,7 @@ export default function RegistrationReceipt({
             {/* Header */}
             <div className="mb-6">
                 <h2 className="text-xl md:text-2xl text-white font-bold tracking-wider mb-2">
-                    REGISTRATION_RECEIPT.LOG
+                    REGISTRATION_ RECEIPT.LOG
                 </h2>
                 <p className="text-red-primary text-xs md:text-sm">
                     Timestamp: {timestamp.date} // {timestamp.time} PST
