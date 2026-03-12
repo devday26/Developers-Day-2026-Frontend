@@ -14,6 +14,7 @@ import type { TeamMemberInput } from "@/types/registration";
 import type { CompetitionWithCategory } from "@/types/competitions";
 import { fetchCompetitionsWithCategory } from "@/lib/api/competitions";
 import { INSTITUTION_OPTIONS } from "@/config/institutions";
+import PaymentDetails from './payment-details'
 
 type TabType = "team" | "leader" | "members" | "payment";
 
@@ -926,35 +927,8 @@ export default function RegistrationForm() {
                                     data you&apos;ve entered in the previous sections.
                                 </p>
                             </div>
-                            <div className="bg-dark-red border border-gray-800 p-4 md:p-5 space-y-3">
-                                <p className="text-red-primary text-xs font-mono">PAYMENT_ACCOUNT_DETAILS</p>
-                                <div className="space-y-2 text-xs md:text-sm">
-                                    <div className="flex justify-between gap-4">
-                                        <span className="text-gray-500">ACCOUNT_NAME</span>
-                                        <span className="text-white font-medium text-right">
-                                            DEVELOPERS DAY COMMITTEE
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between gap-4">
-                                        <span className="text-gray-500">ACCOUNT_NUMBER</span>
-                                        <span className="text-white font-medium text-right">
-                                            XXXX XXXX XXXX 1234
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between gap-4">
-                                        <span className="text-gray-500">IFSC_CODE</span>
-                                        <span className="text-white font-medium text-right">
-                                            ABCD0123456
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between gap-4">
-                                        <span className="text-gray-500">UPI_ID</span>
-                                        <span className="text-white font-medium text-right">
-                                            DEV-DAY@UPI
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            {/* Payment Details */}
+                            <PaymentDetails />
                         </div>
 
                         {/* Screenshot upload field */}
