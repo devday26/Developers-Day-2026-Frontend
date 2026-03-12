@@ -12,7 +12,7 @@ export default function Home() {
       <Hero />
       <AboutUs />
       <ModuleCategories />
-      <CampusReservationMap />
+      {/* <CampusReservationMap /> */}
       <ReconLogs />
       <Testimonials />
       <RegistrationBanner />
