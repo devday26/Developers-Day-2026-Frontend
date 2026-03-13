@@ -10,7 +10,10 @@ import { Select, SelectItem } from "@heroui/select";
 import { toast } from "sonner";
 import RegistrationReceipt from "./registration-receipt";
 import InstitutionAutocomplete from "./institution-autocomplete";
-import { submitPublicRegistration } from "@/lib/api/registration";
+import {
+    checkRegistrationConflicts,
+    submitPublicRegistration,
+} from "@/lib/api/registration";
 import type { TeamMemberInput } from "@/types/registration";
 import type { CompetitionWithCategory } from "@/types/competitions";
 import { fetchCompetitionsWithCategory } from "@/lib/api/competitions";
@@ -112,6 +115,7 @@ export default function RegistrationForm() {
     const [institutionOptions, setInstitutionOptions] = useState<string[]>(INSTITUTION_OPTIONS);
     const [isTurnstileScriptReady, setIsTurnstileScriptReady] = useState(false);
     const [turnstileToken, setTurnstileToken] = useState<string>("");
+    const [isCheckingConflicts, setIsCheckingConflicts] = useState(false);
     const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
     const turnstileWidgetIdRef = useRef<string | null>(null);
     const [formData, setFormData] = useState<FormData>({
@@ -432,6 +436,57 @@ export default function RegistrationForm() {
         }
 
         return null;
+    };
+
+    const handleCheckConflicts = async () => {
+        setSubmitError(null);
+        setSubmitSuccess(null);
+
+        const membersError = validateMembersTab();
+        if (membersError) {
+            setSubmitError(membersError);
+            toast.error(membersError);
+            return;
+        }
+
+        const competitionId = formData.competitionId.trim();
+        const validMembers = getValidMembers();
+
+        setIsCheckingConflicts(true);
+
+        try {
+            const response = await checkRegistrationConflicts({
+                competitionId,
+                leaderCnic: normalizeCnic(formData.leaderCnic),
+                members: validMembers.map((m) => ({
+                    fullName: m.fullName.trim(),
+                    email: m.email.trim(),
+                    cnic: normalizeCnic(m.cnic || ""),
+                    phone: m.phone?.trim() || undefined,
+                    institution: m.institution?.trim() || undefined,
+                    rollNumber: m.rollNumber?.trim() || undefined,
+                })),
+            });
+
+            if (response.conflicts?.length) {
+                const firstConflict = response.conflicts[0];
+                const participantName = firstConflict.participant.fullName;
+                const competitionName = firstConflict.competition.name;
+                toast.warning(
+                    `Warning: ${participantName} is already registered for ${competitionName} at a conflicting time.`
+                );
+            } else {
+                toast.success("No scheduling conflicts found.");
+            }
+        } catch (error: any) {
+            const message =
+                error?.message ||
+                "Could not verify schedule conflicts. Please try again later.";
+            toast.error(message);
+        } finally {
+            setIsCheckingConflicts(false);
+            setActiveTab("payment");
+        }
     };
 
     const handleSubmit = async () => {
@@ -1005,23 +1060,35 @@ export default function RegistrationForm() {
                             </div>
                         ))}
 
-                        <Button
-                            className="bg-gray-800 hover:bg-gray-700 text-white font-mono text-sm"
-                            radius="none"
-                            onPress={addMember}
-                            isDisabled={
-                                (() => {
-                                    if (!selectedCompetition) return false;
-                                    const maxAdditionalMembers = Math.max(
-                                        selectedCompetition.maxTeamSize - 1,
-                                        0
-                                    );
-                                    return formData.members.length >= maxAdditionalMembers;
-                                })()
-                            }
-                        >
-                            + ADD_MEMBER
-                        </Button>
+                        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                            <Button
+                                className="bg-gray-800 hover:bg-gray-700 text-white font-mono text-sm"
+                                radius="none"
+                                onPress={addMember}
+                                isDisabled={
+                                    (() => {
+                                        if (!selectedCompetition) return false;
+                                        const maxAdditionalMembers = Math.max(
+                                            selectedCompetition.maxTeamSize - 1,
+                                            0
+                                        );
+                                        return formData.members.length >= maxAdditionalMembers;
+                                    })()
+                                }
+                            >
+                                + ADD_MEMBER
+                            </Button>
+
+                            <Button
+                                className="bg-red-primary hover:bg-red-700 text-white font-mono disabled:opacity-60 disabled:cursor-not-allowed"
+                                radius="none"
+                                onPress={handleCheckConflicts}
+                                isDisabled={isCheckingConflicts}
+                                isLoading={isCheckingConflicts}
+                            >
+                                {isCheckingConflicts ? "CHECKING..." : "CHECK CONFLICTS →"}
+                            </Button>
+                        </div>
                     </div>
                 )}
 
@@ -1186,53 +1253,46 @@ export default function RegistrationForm() {
                     >
                         ← PREVIOUS
                     </Button>
-                    <Button
-                        className="bg-red-primary hover:bg-red-700 text-white font-mono disabled:opacity-60 disabled:cursor-not-allowed"
-                        radius="none"
-                        isDisabled={isSubmitting}
-                        onPress={() => {
-                            const currentIndex = tabs.findIndex((t) => t.id === activeTab);
+                    {activeTab !== "members" && (
+                        <Button
+                            className="bg-red-primary hover:bg-red-700 text-white font-mono disabled:opacity-60 disabled:cursor-not-allowed"
+                            radius="none"
+                            isDisabled={isSubmitting}
+                            onPress={() => {
+                                const currentIndex = tabs.findIndex((t) => t.id === activeTab);
 
-                            if (activeTab === "payment") {
-                                // Scroll to receipt
-                                receiptRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                                return;
-                            }
-
-                            if (activeTab === "team") {
-                                const teamError = validateTeamTab();
-                                if (teamError) {
-                                    setSubmitError(teamError);
-                                    toast.error(teamError);
+                                if (activeTab === "payment") {
+                                    // Scroll to receipt
+                                    receiptRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                                     return;
                                 }
-                            }
 
-                            if (activeTab === "leader") {
-                                const leaderError = validateLeaderTab();
-                                if (leaderError) {
-                                    setSubmitError(leaderError);
-                                    toast.error(leaderError);
-                                    return;
+                                if (activeTab === "team") {
+                                    const teamError = validateTeamTab();
+                                    if (teamError) {
+                                        setSubmitError(teamError);
+                                        toast.error(teamError);
+                                        return;
+                                    }
                                 }
-                            }
 
-                            if (activeTab === "members") {
-                                const membersError = validateMembersTab();
-                                if (membersError) {
-                                    setSubmitError(membersError);
-                                    toast.error(membersError);
-                                    return;
+                                if (activeTab === "leader") {
+                                    const leaderError = validateLeaderTab();
+                                    if (leaderError) {
+                                        setSubmitError(leaderError);
+                                        toast.error(leaderError);
+                                        return;
+                                    }
                                 }
-                            }
 
-                            if (currentIndex < tabs.length - 1) {
-                                setActiveTab(tabs[currentIndex + 1].id);
-                            }
-                        }}
-                    >
-                        {activeTab === "payment" ? "REVIEW RECEIPT →" : "NEXT →"}
-                    </Button>
+                                if (currentIndex < tabs.length - 1) {
+                                    setActiveTab(tabs[currentIndex + 1].id);
+                                }
+                            }}
+                        >
+                            {activeTab === "payment" ? "REVIEW RECEIPT →" : "NEXT →"}
+                        </Button>
+                    )}
                 </div>
             </div>
 
