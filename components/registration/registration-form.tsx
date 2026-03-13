@@ -268,6 +268,33 @@ export default function RegistrationForm() {
         normalizeInstitutionName(member.institution || "") ===
         normalizeInstitutionName(INSTITUTION_OPTIONS[0] || "");
 
+    const getMinAdditionalMembers = (competitionId: string) => {
+        const selectedCompetition = competitions.find((comp) => comp.id === competitionId);
+        if (!selectedCompetition) return 0;
+        return Math.max(selectedCompetition.minTeamSize - 1, 0);
+    };
+
+    useEffect(() => {
+        if (!formData.competitionId || competitions.length === 0) return;
+
+        const minAdditionalMembers = getMinAdditionalMembers(formData.competitionId);
+
+        setFormData((prev) => {
+            if (prev.members.length >= minAdditionalMembers) {
+                return prev;
+            }
+
+            const membersToAdd = minAdditionalMembers - prev.members.length;
+            return {
+                ...prev,
+                members: [
+                    ...prev.members,
+                    ...Array.from({ length: membersToAdd }, () => ({ ...EMPTY_MEMBER })),
+                ],
+            };
+        });
+    }, [formData.competitionId, competitions]);
+
     const addMember = () => {
         const selectedCompetition = competitions.find(
             (comp) => comp.id === formData.competitionId
@@ -295,6 +322,14 @@ export default function RegistrationForm() {
     };
 
     const removeMember = (index: number) => {
+        const minAdditionalMembers = getMinAdditionalMembers(formData.competitionId);
+        if (formData.members.length <= minAdditionalMembers) {
+            const message = `At least ${minAdditionalMembers} member row(s) are required for this competition.`;
+            setSubmitError(message);
+            toast.error(message);
+            return;
+        }
+
         setFormData((prev) => ({
             ...prev,
             members: prev.members.filter((_, i) => i !== index),
