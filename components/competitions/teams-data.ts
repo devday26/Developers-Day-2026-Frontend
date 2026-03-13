@@ -1,6 +1,6 @@
 const teamsData = {
     "dev-design": [
-        { name: "Design Arena by WebApp Fusion", "teamMembers": "Wareesha ● Saahil Ghulam Mohammad" },
+        { name: "Design Arena by WebApp Fusion", "teamMembers": "Wareesha Faheem ● Saahil Ghulam Mohammad" },
         { name: "Hackathon", "teamMembers": "Muhammad Anas ● Abdul Rafay Tariq" },
         { name: "Stack Breach", "teamMembers": "Syed Khizer Raza ● Muhammad Omer ● Umer Abbasi" }
     ],
@@ -64,12 +64,12 @@ const categoryData = {
     ],
 
     "electrical-eng": [
-        { role: "Director", name: "Affan Ahmed", studentId: "23K-6057", initials: "AA", linkedin: "" },
+        { role: "Director", name: "Affan Ahmed", studentId: "23K-6057", initials: "AA", linkedin: "www.linkedin.com/in/affan-ahmed-15060a21a/" },
         { role: "Assistant Director", name: "Eshaal Ali", studentId: "23K-6075", initials: "EA", linkedin: "" },
-        { role: "Assistant Director", name: "Abdullah Ahmed", studentId: "23K-6072", initials: "AA", linkedin: "" },
+        { role: "Assistant Director", name: "Abdullah Ahmed", studentId: "23K-6072", initials: "AA", linkedin: "www.linkedin.com/in/syed-abdullah-ahmed-403016330/" },
         { role: "Assistant Director", name: "Mirza Shehzor Ali", studentId: "23K-6073", initials: "MSA", linkedin: "" },
-        { role: "Assistant Director", name: "Mohammad Adan", studentId: "23K-6107", initials: "MA", linkedin: "" },
-        { role: "Assistant Director", name: "Muhammad Hasnain Memon", studentId: "24K-2001", initials: "MHM", linkedin: "" }
+        { role: "Assistant Director", name: "Mohammad Adan", studentId: "23K-6107", initials: "MA", linkedin: "www.linkedin.com/in/mohammad-adan-410b59291/" },
+        { role: "Assistant Director", name: "Muhammad Hasnain Memon", studentId: "24K-2001", initials: "MHM", linkedin: "www.linkedin.com/in/muhammad-hasnain-memon-8215701b8/" }
     ],
 
     "general": [
