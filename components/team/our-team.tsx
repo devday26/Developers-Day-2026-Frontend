@@ -5,28 +5,63 @@ import { motion } from "framer-motion";
 
 const uiuxMembers = [
   {
+    id: "ABR-01",
     name: "ASJAD BIN REHAN",
     role: "LEAD UI/UX",
     image: "/team/uiux/asjad.png",
-    linkedInUrl: "https://www.linkedin.com/in/nehaaamir17/",
+    linkedInUrl: "https://www.linkedin.com/in/asjad-bin-rehan-a820532a6/",
   },
   {
-    name: "HASSAN SAMI",
+    id: "HS-02",
+    name: "HASAN SAMI",
     role: "CO-LEAD UI/UX",
     image: "/team/uiux/hassan.png",
-    linkedInUrl: "https://www.linkedin.com/in/muhammad-hasnain-61b4aa379/",
+    linkedInUrl: "https://www.linkedin.com/in/hasan-sami/",
   },
   {
+    id: "SJ-03",
     name: "SAMEED JAMAL",
     role: "CO-LEAD UI/UX",
     image: "/team/uiux/sameed.png",
-    linkedInUrl: "https://www.linkedin.com/in/shoaib-raza-9497a72b5/",
+    linkedInUrl: "https://www.linkedin.com/in/sameed-jamal/",
   },
   {
+    id: "WF-04",
     name: "WAREESHA FAHEEM",
     role: "CO-LEAD UI/UX",
     image: "/team/uiux/wareesha.png",
-    linkedInUrl: "https://www.linkedin.com/in/mhuzaifa777/",
+    linkedInUrl: "https://www.linkedin.com/in/wareesha-faheem/",
+  },
+];
+
+const webMembers = [
+  {
+    id: "OR-01",
+    name: "OWAIS RAFIQ",
+    role: "LEAD WEB DEV",
+    image: "/team/web/owais.png",
+    linkedInUrl: "https://www.linkedin.com/in/owais-rafiq-639494253/",
+  },
+  {
+    id: "AA-02",
+    name: "ABDULLAH AZHAR",
+    role: "CO-LEAD TECH OPS",
+    image: "/team/web/abdullah.png",
+    linkedInUrl: "https://www.linkedin.com/in/abbbdullah/",
+  },
+  {
+    id: "HS-03",
+    name: "ARHAM ALVI",
+    role: "CO-LEAD WEB DEV",
+    image: "/team/web/arham.png",
+    linkedInUrl: "https://pk.linkedin.com/in/arham-alvi-62068b1bb",
+  },
+  {
+    id: "SR-04",
+    name: "SHAREEQ RASHID",
+    role: "CO-LEAD WEB DEV",
+    image: "/team/web/shareeq.png",
+    linkedInUrl: "https://pk.linkedin.com/in/shareeq-rashid",
   },
 ];
 
@@ -63,6 +98,33 @@ export default function OurTeam() {
           {/* OTHER MEMBERS GRID */}
           <div className="p-8 grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {uiuxMembers.map((member, index) => (
+              <motion.div
+                key={member.role + index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{
+                  duration: 0.6,
+                  delay: Math.min(index * 0.08, 0.56),
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              >
+                <TeamCard {...member} />
+              </motion.div>
+            ))}
+          </div>
+
+
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4 mt-4 sm:mt-8 pl-4 sm:pl-7 uppercase font-mono tracking-wide">
+            WEB_DEVELOPMENT
+          </h1>
+
+          <div className="h-[3px] w-full bg-gradient-to-r from-[#D71D22] to-[#191111]" />
+
+          {/* OTHER MEMBERS GRID */}
+          <div className="p-8 grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {webMembers.map((member, index) => (
               <motion.div
                 key={member.role + index}
                 initial={{ opacity: 0, y: 50 }}

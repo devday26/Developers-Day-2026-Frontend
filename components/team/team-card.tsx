@@ -9,20 +9,21 @@ interface TeamCardProps {
   name: string;
   role: string;
   image: string;
+  id: string;
   linkedInUrl?: string;
 }
 
-export default function ExcomCard({ name, role, image, linkedInUrl }: TeamCardProps) {
+export default function ExcomCard({ name, role, image, id, linkedInUrl }: TeamCardProps) {
   return (
     <div className="relative bg-[#1C0D0D] border-5 border-[#332323] overflow-hidden flex flex-col min-h-[350px] h-full">
 
       {/* Image — fixed height, never grows */}
-      <div className="relative flex-shrink-0 w-full h-[265px]">
+      <div className="relative flex-shrink-0 w-full h-[265px] border-[#1C0D0D] border-2">
         <Image
           src={image}
           alt={name}
           fill
-          className="object-contain object-bottom grayscale pt-2
+          className="object-contain object-bottom pt-2
             bg-[radial-gradient(50%_50%_at_50%_50%,#7F7F7F_0%,#383838_37.02%,#272727_65.38%,#191919_100%)]"
         />
 
@@ -42,7 +43,7 @@ export default function ExcomCard({ name, role, image, linkedInUrl }: TeamCardPr
         )}
 
         <div className="absolute top-2 right-2 text-sm font-mono font-bold px-1 bg-black text-[#6E1617]">
-          ID-001-AX
+          {id}
         </div>
       </div>
 
