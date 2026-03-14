@@ -1,6 +1,6 @@
 const teamsData = {
     "dev-design": [
-        { name: "Design Arena by WebApp Fusion", "teamMembers": "Wareesha Faheem ● Saahil Ghulam Mohammad" },
+        { name: "Design Arena by WebApp Fusion", "teamMembers": "Wareesha Faheem" },
         { name: "Hackathon", "teamMembers": "Muhammad Anas ● Abdul Rafay Tariq" },
         { name: "Stack Breach", "teamMembers": "Syed Khizer Raza ● Muhammad Omer ● Umer Abbasi" }
     ],
