@@ -89,7 +89,7 @@ export default function ModuleCategories() {
       icon: <Image src="/icons/business.svg" alt="AI" width={32} height={32} />,
       title: "BUSINESS",
       description:
-      "Strategic thinking and entrepreneurial innovation through startup pitches, investment ideas, and business case challenges.",
+        "Strategic thinking and entrepreneurial innovation through startup pitches, investment ideas, and business case challenges.",
       code: "C_08",
       url: "/modules/business",
     },
@@ -106,8 +106,8 @@ export default function ModuleCategories() {
           transition={{ duration: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
           className="flex justify-between items-center mb-6"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-            MODULE_CATEGORIES
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold pr-3">
+            MODULE_<wbr />CATEGORIES
           </h2>
           <span className="bg-red-primary text-white text-xs font-mono px-3 py-1">
             V2

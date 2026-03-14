@@ -31,8 +31,8 @@ export default function ExcomCard({ name, role, image, linkedInUrl, gradientVari
     <>
       <div
         className={`relative bg-[#232323] border border-gray-700/50 overflow-hidden flex flex-col ${isMiddle
-            ? "min-h-[340px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[450px]"
-            : "min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px]"
+          ? "min-h-[340px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[450px]"
+          : "min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px]"
           }`}
       >
         {/* Gradient background */}
@@ -84,7 +84,7 @@ export default function ExcomCard({ name, role, image, linkedInUrl, gradientVari
               alt={name}
               width={1000}
               height={1000}
-              className="object-contain object-bottom w-full h-auto grayscale min-h-[220px] sm:min-h-[230px] md:min-h-[240px]"
+              className="object-contain object-bottom w-full h-auto min-h-[220px] sm:min-h-[230px] md:min-h-[240px]"
             />
           </div>
         </div>

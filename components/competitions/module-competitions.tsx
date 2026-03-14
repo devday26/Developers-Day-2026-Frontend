@@ -42,7 +42,7 @@ export interface CompetitionsCateogoryProps {
   id: string;
   icon: any;
   title: string;
-  description: string;
+  categoryDescription: Array<string>;
   color: string;
   bgColor: string;
   categoryCompetitions: Competition[];
@@ -52,7 +52,7 @@ export default function ModuleCompetitions({
   id,
   icon,
   title,
-  description: _description,
+  categoryDescription,
   color,
   bgColor,
   categoryCompetitions
@@ -118,14 +118,13 @@ export default function ModuleCompetitions({
             {/* Row 2: Description */}
             <motion.p
               animate={{ opacity: 1, y: 0 }}
-              className="text-gray-400 text-[10px] sm:text-xs md:text-sm leading-relaxed uppercase tracking-widest max-w-xl"
+              className="text-gray-400 text-[10px] sm:text-xs md:text-sm leading-relaxed uppercase tracking-widest"
               initial={{ opacity: 0, y: 16 }}
               transition={{ duration: 0.55, delay: 0.45, ease: "easeOut" }}
             >
-              PROVE YOUR WORTH IN THE DIGITAL ARENA. TWO TRACKS. HIGH STAKES.
-              PURE CODE.
-              <br className="hidden sm:block" /> SELECT YOUR PROTOCOL AND
-              EXECUTE
+              {categoryDescription[0]}
+              <br className="hidden sm:block" />
+              {categoryDescription[1]}
             </motion.p>
           </div>
         </motion.div>
@@ -205,15 +204,15 @@ export default function ModuleCompetitions({
 
 
 
-        <motion.div 
+        <motion.div
           className="sm:mt-10 mt-2"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
           variants={{
             hidden: { opacity: 0, y: 40 },
-            visible: { 
-              opacity: 1, 
+            visible: {
+              opacity: 1,
               y: 0,
               transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
             }

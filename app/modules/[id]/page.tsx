@@ -8,8 +8,10 @@ const modules = [
         id: "coding",
         icon: "/icons/coding.svg",
         title: "CODING_COMPETITIONS",
-        description:
-            "Solve algorithmic challenges and compete in real-time coding competitions.",
+        categoryDescription: [
+            "PROVE YOUR WORTH IN THE DIGITAL ARENA. THREE TRACKS. HIGH STAKES. PURE CODE.",
+            "SELECT YOUR PROTOCOL AND EXECUTE."
+        ],
         color: "#2563EB",
         bgColor: "#000613",
     },
@@ -17,8 +19,10 @@ const modules = [
         id: "software-eng",
         icon: "/icons/software.svg",
         title: "SOFTWARE ENG_COMPETITIONS",
-        description:
-            "Architecting resilient systems that withstand the pressure of high-throughput operations.",
+        categoryDescription: [
+            "SYSTEMS RUN. ARCHITECTURES COLLIDE. LOGIC PREVAILS.",
+            "ENGINEER THE CORE AND DOMINATE THE STACK."
+        ],
         color: "#7C3AED",
         bgColor: "#060010",
     },
@@ -26,8 +30,10 @@ const modules = [
         id: "tech-quest",
         icon: "/icons/tech.svg",
         title: "TECH_QUEST",
-        description:
-            "Exploration and tech testing platform digital innovations.",
+        categoryDescription: [
+            "CLUES HIDDEN. SYSTEMS LOCKED. SECRETS EVERYWHERE.",
+            "DECODE THE SIGNALS AND FIND THE EXIT."
+        ],
         color: "#F59E0B",
         bgColor: "#0A0600",
 
@@ -36,8 +42,10 @@ const modules = [
         id: "dev-design",
         icon: "/icons/dev.svg",
         title: "DEV & DESIGN_COMPETITIONS",
-        description:
-            "Stress-testing structures through adversarial design and deconstruction.",
+        categoryDescription: [
+            "BUILD THE PRODUCT. DESIGN THE EXPERIENCE. SHIP THE IDEA.",
+            "FROM PIXELS TO PROTOTYPES — CREATE WHAT COMES NEXT."
+        ],
         color: "#3AED5B",
         bgColor: "#000902",
     },
@@ -45,8 +53,10 @@ const modules = [
         id: "ai-data",
         icon: "/icons/ai.svg",
         title: "AI & DATA SCI._COMPETITIONS",
-        description:
-            "Deep neural modeling and predictive analytics processing vast datasets logic warfare.",
+        categoryDescription: [
+            "TRAIN THE MODEL. CRACK THE DATA. OUTSMART THE MACHINE.",
+            "AI IS THE WEAPON. INTELLIGENCE IS THE ADVANTAGE."
+        ],
         color: "#00F0FF",
         bgColor: "#00080E",
     },
@@ -54,8 +64,10 @@ const modules = [
         id: "general",
         icon: "/icons/general.svg",
         title: "GENERAL_COMPETITIONS",
-        description:
-            "Open competitions across multiple disciplines testing creativity and problem solving.",
+        categoryDescription: [
+            "PURE CHAOS. ZERO RULES. MAXIMUM FUN.",
+            "GAMES, CHALLENGES, AND MOMENTS YOU WON'T FORGET."
+        ],
         color: "#949494",
         bgColor: "#070707",
     },
@@ -63,8 +75,10 @@ const modules = [
         id: "electrical-eng",
         icon: "/icons/electrical.svg",
         title: "ELECTRICAL ENG._COMPETITIONS",
-        description:
-            "Hardware systems, circuit design and embedded engineering challenges.",
+        categoryDescription: [
+            "CIRCUITS LIVE. MOTORS ROAR. ROBOTS COLLIDE.",
+            "ENGINEER. BUILD. BATTLE. LET YOUR MACHINE DO THE TALKING."
+        ],
         color: "#D35400",
         bgColor: "#0A0400",
     },
@@ -72,8 +86,10 @@ const modules = [
         id: "business",
         icon: "/icons/business.svg",
         title: "BUSINESS_COMPETITIONS",
-        description:
-            "Strategy, entrepreneurship and business case competitions.",
+        categoryDescription: [
+            "BUILD EMPIRES. BREAK MARKETS. THINK LIKE A CEO.",
+            "ANALYZE THE NUMBERS. PITCH THE FUTURE. OUTPLAY THE COMPETITION."
+        ],
         color: "#D000FF",
         bgColor: "#0B000E",
     },

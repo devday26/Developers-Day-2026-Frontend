@@ -1,6 +1,6 @@
 "use client";
 
-import TeamCard from "./excom-card";
+import ExcomCard from "./excom-card";
 import { motion } from "framer-motion";
 
 function roleFromFilename(filename: string): string {
@@ -102,15 +102,15 @@ const otherMembers = teamMembers.filter(member =>
 
 export default function OurExcom() {
   return (
-    <section className="bg-dark-red text-white py-16 md:py-24">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="bg-dark-red text-white pt-16 md:pt-24 ">
+      <div className="container mx-auto px-4 md:px-6 ">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-          className="flex gap-4 mb-12 md:mb-16 border-l-3 border-red-primary pl-4 sm:pl-7 pt-2 items-start font-mono"
+          className="flex gap-4 mb-8 md:mb-16 border-l-3 border-red-primary pl-4 sm:pl-7 pt-2 items-start font-mono"
         >
           <div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-7">
@@ -137,7 +137,7 @@ export default function OurExcom() {
                 }}
                 whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
               >
-                <TeamCard {...member} />
+                <ExcomCard {...member} />
               </motion.div>
             ))}
           </div> */}
@@ -156,7 +156,7 @@ export default function OurExcom() {
               }}
               className="w-full md:w-1/2 lg:w-1/3"
             >
-              <TeamCard {...member} />
+              <ExcomCard {...member} />
             </motion.div>
           ))}
         </div>
@@ -176,7 +176,7 @@ export default function OurExcom() {
               }}
               whileHover={{ y: -6, transition: { duration: 0.25 } }}
             >
-              <TeamCard {...member} />
+              <ExcomCard {...member} />
             </motion.div>
           ))}
         </div>

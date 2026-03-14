@@ -239,7 +239,24 @@ export default function RegistrationForm() {
     }, [activeTab, isTurnstileScriptReady, turnstileSiteKey]);
 
     const updateFormData = (field: keyof FormData, value: any) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
+        setFormData((prev) => {
+            if (field === "institutionName") {
+                const nextInstitution = String(value ?? "");
+                const isFirstInstitution =
+                    normalizeInstitutionName(nextInstitution) ===
+                    normalizeInstitutionName(INSTITUTION_OPTIONS[0] || "");
+
+                // If the user switches away from the first institution, roll number should not
+                // be validated/sent. Clear it to avoid stale invalid roll numbers blocking progress.
+                if (!isFirstInstitution && prev.leaderRollNumber) {
+                    return { ...prev, institutionName: nextInstitution, leaderRollNumber: "" };
+                }
+
+                return { ...prev, institutionName: nextInstitution };
+            }
+
+            return { ...prev, [field]: value };
+        });
         setSubmitError(null);
         setSubmitSuccess(null);
     };
@@ -247,9 +264,26 @@ export default function RegistrationForm() {
     const updateMember = (index: number, field: keyof TeamMemberInput, value: string) => {
         setFormData((prev) => ({
             ...prev,
-            members: prev.members.map((member, i) =>
-                i === index ? { ...member, [field]: value } : member
-            ),
+            members: prev.members.map((member, i) => {
+                if (i !== index) return member;
+
+                if (field === "institution") {
+                    const nextInstitution = value;
+                    const isFirstInstitution =
+                        normalizeInstitutionName(nextInstitution) ===
+                        normalizeInstitutionName(INSTITUTION_OPTIONS[0] || "");
+
+                    // Same idea as leader: if member switches away from first institution,
+                    // clear roll number so an old invalid value doesn't get validated/sent.
+                    if (!isFirstInstitution && member.rollNumber) {
+                        return { ...member, institution: nextInstitution, rollNumber: "" };
+                    }
+
+                    return { ...member, institution: nextInstitution };
+                }
+
+                return { ...member, [field]: value };
+            }),
         }));
         setSubmitError(null);
         setSubmitSuccess(null);
@@ -942,7 +976,7 @@ export default function RegistrationForm() {
                                 radius="none"
                             />
                             <Input
-                                placeholder="PHONE_NUMBER"
+                                placeholder="PHONE_NUMBER (E.G 03281234567)"
                                 type="tel"
                                 inputMode="numeric"
                                 value={formData.leaderPhone}
@@ -1038,7 +1072,7 @@ export default function RegistrationForm() {
                                         radius="none"
                                     />
                                     <Input
-                                        placeholder="PHONE (OPTIONAL)"
+                                        placeholder="PHONE (OPTIONAL E.G 03281234567)"
                                         value={member.phone || ""}
                                         type="tel"
                                         inputMode="numeric"

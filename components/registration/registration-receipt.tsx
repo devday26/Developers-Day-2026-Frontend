@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/button";
-import { CheckCircleIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, ArrowDownTrayIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 
 interface RegistrationReceiptProps {
     teamName?: string;
@@ -77,38 +77,59 @@ export default function RegistrationReceipt({
         return { year, month, day, hour, minute, second };
     };
 
-    const formatTime12Hour = (hour: number, minute: number): string => {
+    const formatTime12Hour = (hour: number, minute: number, second: number): string => {
         const suffix = hour >= 12 ? "PM" : "AM";
         const normalizedHour = hour % 12 || 12;
-        return `${normalizedHour}:${String(minute).padStart(2, "0")} ${suffix}`;
+        return `${normalizedHour}:${String(minute).padStart(2, "0")}:${String(second).padStart(2, "0")} ${suffix}`;
     };
 
-    const formatModuleReservation = (start?: string | null, end?: string | null): string => {
+    const formatModuleReservationDate = (start?: string | null, end?: string | null): string => {
         const startParts = parseBackendDateTimeParts(start);
         const endParts = parseBackendDateTimeParts(end);
 
         if (!startParts && !endParts) {
-            return "--/--/---- // --:-- -- PST";
+            return "--/--/----";
         }
 
         const baseDate = startParts || endParts;
         if (!baseDate) {
-            return "--/--/---- // --:-- -- PST";
+            return "--/--/----";
         }
 
         const date = `${String(baseDate.day).padStart(2, "0")}-${String(baseDate.month).padStart(2, "0")}-${baseDate.year}`;
-        const startTime = startParts
-            ? formatTime12Hour(startParts.hour, startParts.minute)
-            : null;
-        const endTime = endParts
-            ? formatTime12Hour(endParts.hour, endParts.minute)
-            : null;
+        return `${date.split("-").join("/")}`;
+    };
 
-        if (startTime && endTime) {
-            return `${date} // ${startTime} - ${endTime} PST`;
+    const formatModuleReservationTime = (start?: string | null, end?: string | null): string => {
+        const startParts = parseBackendDateTimeParts(start);
+        const endParts = parseBackendDateTimeParts(end);
+
+        if (!startParts && !endParts) {
+            return "--:--:-- -- PST";
         }
 
-        return `${date} // ${(startTime || endTime)} PST`;
+        const baseDate = startParts || endParts;
+        if (!baseDate) {
+            return "--:--:-- -- PST";
+        }
+
+        const startTime = startParts && formatTime12Hour(
+            startParts.hour,
+            startParts.minute,
+            startParts.second
+        );
+
+        const endTime = endParts && formatTime12Hour(
+            endParts.hour,
+            endParts.minute,
+            endParts.second
+        );
+
+        if (startTime && endTime) {
+            return `${startTime} - ${endTime} PST`;
+        }
+
+        return `${(startTime || endTime)} PST`;
     };
 
     const totalFee = moduleFee - discount;
@@ -152,13 +173,13 @@ export default function RegistrationReceipt({
             {/* Header */}
             <div className="mb-6">
                 <h2 className="text-xl md:text-2xl text-white font-bold tracking-wider mb-2">
-                    REGISTRATION_ RECEIPT.LOG
+                    REGISTRATION_<wbr />RECEIPT.LOG
                 </h2>
                 <p className="text-red-primary text-xs md:text-sm">
-                    Timestamp: {timestamp.date} // {timestamp.time} PST
+                    Timestamp: {timestamp.date} <wbr /><span className="text-nowrap">// {timestamp.time} PST</span>
                 </p>
                 <p className="text-red-primary text-xs md:text-sm">
-                    Module_Date_Reserved: {formatModuleReservation(moduleStartTime, moduleEndTime)}
+                    Module_Date_Reserved: {formatModuleReservationDate(moduleStartTime, moduleEndTime)} <span className="text-nowrap">// {formatModuleReservationTime(moduleStartTime, moduleEndTime)}</span>
                 </p>
             </div>
 
@@ -243,35 +264,58 @@ export default function RegistrationReceipt({
                         You will receive a confirmation email once your payment is verified. Keep this receipt for your records.
                     </p>
                 </div>
+            )
+            }
+
+            {['Guilty By Data', 'Today We are VibeCoding', 'Design Arena By WebApp Fusion'].includes(moduleName) && (
+                <div className="w-full mt-4 flex justify-center">
+                    <div>
+                        <InformationCircleIcon className="inline-block w-5 h-5 text-red-primary" />
+                        <span className="ml-2 text-red-primary text-sm font-bold">SYSTEM_REQUIREMENT </span>
+                        <span className="text-gray-500 text-sm">Bring your own laptop. Your Machine is your Weapon.</span>
+                    </div>
+                </div>
+            )}
+
+            {moduleName == 'Hackathon' && (
+                <div className="w-full mt-4 flex justify-center">
+                    <div>
+                        <InformationCircleIcon className="w-5 h-5 text-red-primary inline-block" />
+                        <span className="text-red-primary text-sm font-bold">TIMELINE_NOTICE </span>
+                        <span className="text-gray-500 text-sm">Listed hours indicate the evaluation window. The competition may begin 1-2 days earlier.</span>
+                    </div>
+                </div>
             )}
 
             {/* Action Buttons */}
-            {(onConfirmEntry || onDownloadReceipt) && (
-                <div data-no-capture className="grid grid-cols-1 gap-4 mt-6">
-                    {onConfirmEntry && (
-                        <Button
-                            className="bg-red-primary hover:bg-red-700 text-white font-mono text-sm h-14 uppercase"
-                            radius="none"
-                            startContent={!isSubmitting ? <CheckCircleIcon className="w-5 h-5" /> : undefined}
-                            isDisabled={!teamName || !leaderName || !moduleName || isSubmitting || isConfirmDisabled}
-                            isLoading={isSubmitting}
-                            onPress={onConfirmEntry}
-                        >
-                            {isSubmitting ? "SUBMITTING..." : "CONFIRM_ENTRY"}
-                        </Button>
-                    )}
-                    {onDownloadReceipt && (
-                        <Button
-                            className="bg-gray-800 hover:bg-gray-700 text-white font-mono text-sm h-14 uppercase"
-                            radius="none"
-                            startContent={<ArrowDownTrayIcon className="w-5 h-5" />}
-                            onPress={onDownloadReceipt}
-                        >
-                            DOWNLOAD_RECEIPT
-                        </Button>
-                    )}
-                </div>
-            )}
-        </div>
+            {
+                (onConfirmEntry || onDownloadReceipt) && (
+                    <div data-no-capture className="grid grid-cols-1 gap-4 mt-6">
+                        {onConfirmEntry && (
+                            <Button
+                                className="bg-red-primary hover:bg-red-700 text-white font-mono text-sm h-14 uppercase"
+                                radius="none"
+                                startContent={!isSubmitting ? <CheckCircleIcon className="w-5 h-5" /> : undefined}
+                                isDisabled={!teamName || !leaderName || !moduleName || isSubmitting || isConfirmDisabled}
+                                isLoading={isSubmitting}
+                                onPress={onConfirmEntry}
+                            >
+                                {isSubmitting ? "SUBMITTING..." : "CONFIRM_ENTRY"}
+                            </Button>
+                        )}
+                        {onDownloadReceipt && (
+                            <Button
+                                className="bg-gray-800 hover:bg-gray-700 text-white font-mono text-sm h-14 uppercase"
+                                radius="none"
+                                startContent={<ArrowDownTrayIcon className="w-5 h-5" />}
+                                onPress={onDownloadReceipt}
+                            >
+                                DOWNLOAD_RECEIPT
+                            </Button>
+                        )}
+                    </div>
+                )
+            }
+        </div >
     );
 }

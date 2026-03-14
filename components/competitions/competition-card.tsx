@@ -2,7 +2,7 @@
 
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
-import { UserGroupIcon, BanknotesIcon, CalendarDaysIcon } from "@heroicons/react/24/solid";
+import { UserGroupIcon, BanknotesIcon, CalendarDaysIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 
 export interface CompetitionCardProps {
@@ -70,10 +70,9 @@ export default function CompetitionCard({
     return `${normalizedHour}:${String(minute).padStart(2, "0")} ${suffix}`;
   };
 
-  const formatSchedule = (start?: string | null, end?: string | null): string => {
+  const formatScheduleDate = (start?: string | null): string => {
     const startParts = parseBackendDateTimeParts(start);
-    const endParts = parseBackendDateTimeParts(end);
-    const dateRef = startParts || endParts;
+    const dateRef = startParts;
 
     if (!dateRef) {
       return "Schedule TBA";
@@ -94,17 +93,26 @@ export default function CompetitionCard({
       "December",
     ];
     const date = `${String(dateRef.day).padStart(2, "0")} ${monthNames[dateRef.month - 1]} ${dateRef.year}`;
+
+    return `${date}`;
+  };
+
+  const formatScheduleTime = (start?: string | null, end?: string | null): string => {
+    const startParts = parseBackendDateTimeParts(start);
+    const endParts = parseBackendDateTimeParts(end);
+
     const startLabel = startParts ? formatTime12Hour(startParts.hour, startParts.minute) : null;
     const endLabel = endParts ? formatTime12Hour(endParts.hour, endParts.minute) : null;
 
     if (startLabel && endLabel) {
-      return `${date} • ${startLabel} - ${endLabel}`;
+      return `${startLabel} - ${endLabel}`;
     }
 
-    return `${date} • ${startLabel || endLabel}`;
+    return `${startLabel || endLabel}`;
   };
 
-  const scheduleLabel = formatSchedule(startTime, endTime);
+  const scheduleDate = formatScheduleDate(startTime);
+  const scheduleTime = formatScheduleTime(startTime, endTime);
 
   return (
     <motion.div
@@ -119,11 +127,31 @@ export default function CompetitionCard({
       </div>
 
       {/* Content */}
-      <div className="p-8 flex flex-col gap-6 flex-1">
+      <div className="p-8 flex flex-col gap-4 flex-1">
         <p className="text-[#CBD5E1] text-sm leading-6 flex-1">{description}</p>
 
+        {['Guilty By Data', 'Today We are VibeCoding', 'Design Arena By WebApp Fusion'].includes(title) && (
+          <div className="">
+            <div className="flex items-center gap-2">
+              <InformationCircleIcon className="w-4 h-4 text-[var(--color,#2563EB)]" />
+              <span className="text-[var(--color,#2563EB)] text-sm font-bold">SYSTEM_REQUIREMENT</span> <br />
+            </div>
+            <span className="text-[#CBD5E1] text-sm">Bring your own laptop. Your Machine is your Weapon.</span>
+          </div>
+        )}
+
+        {title == 'Hackathon' && (
+          <div className="">
+            <div className="flex items-center gap-2">
+              <InformationCircleIcon className="w-4 h-4 text-[var(--color,#2563EB)]" />
+              <span className="text-[var(--color,#2563EB)] text-sm font-bold">TIMELINE_NOTICE</span> <br />
+            </div>
+            <span className="text-[#CBD5E1] text-sm">Listed hours indicate the evaluation window. The competition may begin 1-2 days earlier.</span>
+          </div>
+        )}
+
         {/* Info Row */}
-        <div className="flex flex-col sm:flex-col gap-4 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-4 w-full">
           {/* Team Size */}
           <div className="bg-[#1A1A1A] p-3 w-full border border-[#FFFFFF0D] border-l-2 border-l-[var(--color,#2563EB)] flex flex-col items-baseline gap-2">
             <UserGroupIcon className="w-4 h-4 text-[var(--color,#2563EB)]" />
@@ -152,24 +180,34 @@ export default function CompetitionCard({
           </div>
 
           <div className="bg-[#1A1A1A] p-3 w-full border border-[#FFFFFF0D] border-l-2 border-l-[var(--color,#2563EB)] flex flex-col items-baseline gap-2">
-            <CalendarDaysIcon className="w-4 h-4 text-[var(--color,#2563EB)]" />
-            <span className="text-white text-sm">{scheduleLabel}</span>
+            <div className="flex gap-4 items-center">
+              <CalendarDaysIcon className="w-4 h-4 text-[var(--color,#2563EB)]" />
+              <span className="text-white text-xs">{scheduleDate}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-white text-sm">{scheduleTime}</span>
+            </div>
           </div>
 
-          {/* Register Button */}
-          <Button
-            fullWidth
-            as={capacityLimit <= 0 && earlyBirdLimit <= 0 ? "button" : Link}
-            href={capacityLimit <= 0 && earlyBirdLimit <= 0 ? undefined : registerHref}
-            isDisabled={capacityLimit <= 0 && earlyBirdLimit <= 0}
-            radius="none"
-            size="lg"
-            className="font-bold tracking-widest text-sm justify-between px-5 bg-[var(--color,#2563EB)] hover:border hover:border-[var(--color,#2563EB)] hover:text-[var(--color,#2563EB)] hover:bg-transparent flex-shrink-0"
-            endContent={capacityLimit <= 0 && earlyBirdLimit <= 0 ? undefined : <span className="text-lg font-bold">→</span>}
-          >
-            {capacityLimit <= 0 && earlyBirdLimit <= 0 ? "COMPETITION FULL" : "REGISTER NOW"}
-          </Button>
+          {/* <div className="cursor-pointer hover:bg-white/10 p-3 w-full border-2 border-[var(--color,#2563EB)] flex items-center justify-between sm:justify-center gap-2 px-5">
+            <span className="text-white font-bold sm:font-normal text-sm">RULEBOOK</span>
+            <DocumentArrowDownIcon className="w-5 h-5 text-[var(--color,#2563EB)]" />
+          </div> */}
+
         </div>
+        {/* Register Button */}
+        <Button
+          fullWidth
+          as={capacityLimit <= 0 && earlyBirdLimit <= 0 ? "button" : Link}
+          href={capacityLimit <= 0 && earlyBirdLimit <= 0 ? undefined : registerHref}
+          isDisabled={capacityLimit <= 0 && earlyBirdLimit <= 0}
+          radius="none"
+          size="lg"
+          className="font-bold tracking-widest text-sm justify-between px-5 bg-[var(--color,#2563EB)] hover:border hover:border-[var(--color,#2563EB)] hover:text-[var(--color,#2563EB)] hover:bg-transparent flex-shrink-0"
+          endContent={capacityLimit <= 0 && earlyBirdLimit <= 0 ? undefined : <span className="text-lg font-bold">→</span>}
+        >
+          {capacityLimit <= 0 && earlyBirdLimit <= 0 ? "COMPETITION FULL" : "REGISTER NOW"}
+        </Button>
       </div>
     </motion.div>
   );
