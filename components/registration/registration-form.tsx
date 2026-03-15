@@ -818,13 +818,16 @@ export default function RegistrationForm() {
                                 />
                             </div>
                             <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">02</label>
-                                <InstitutionAutocomplete
-                                    placeholder="INSTITUTION_NAME"
-                                    value={formData.institutionName}
-                                    options={institutionOptions}
-                                    onValueChange={(value) => updateFormData("institutionName", value)}
-                                    onAddOption={addInstitutionOption}
+                                <label className="text-red-primary text-xs font-mono mb-2 block">02 (OPTIONAL)</label>
+                                <Input
+                                    placeholder="REFERENCE_CODE"
+                                    value={formData.referenceCode}
+                                    onValueChange={(value) => updateFormData("referenceCode", value)}
+                                    classNames={{
+                                        input: "bg-dark-red text-white placeholder:text-gray-600 text-xs",
+                                        inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
+                                    }}
+                                    radius="none"
                                 />
                             </div>
                         </div>
@@ -935,32 +938,6 @@ export default function RegistrationForm() {
                                         );
                                     })}
                                 </Select>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                            <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">06 (OPTIONAL)</label>
-                                <Input
-                                    placeholder="REFERENCE_CODE"
-                                    value={formData.referenceCode}
-                                    onValueChange={(value) => updateFormData("referenceCode", value)}
-                                    classNames={{
-                                        input: "bg-dark-red text-white placeholder:text-gray-600 text-xs",
-                                        inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
-                                    }}
-                                    radius="none"
-                                />
-                            </div>
-                            <div className="flex items-center justify-between gap-3">
-                                <p className="text-gray-400 text-xs md:text-sm font-mono">DONT'T REMEMBER YOUR BA CODE?</p>
-                                <Button
-                                    className="bg-red-primary hover:bg-red-700 text-white text-xs md:text-sm font-mono whitespace-nowrap"
-                                    radius="none"
-                                    onPress={() => window.open("https://developers-day.com/ba-codes", "_blank")}
-                                >
-                                    VIEW CODES ↗
-                                </Button>
                             </div>
                         </div>
 

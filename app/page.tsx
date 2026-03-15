@@ -5,7 +5,7 @@ import { ModuleCategories } from "@/components/modules";
 import { ReconLogs } from "@/components/recon";
 import { Testimonials } from "@/components/testimonials";
 import { RegistrationBanner } from "@/components/registration";
-import CampusReservationMap from "@/components/campusReservationMap";
+// import CampusReservationMap from "@/components/campusReservationMap";
 
 const title = "Developer's Day 2026 | FAST NUCES Karachi";
 const description =
@@ -85,7 +85,7 @@ export default function Home() {
       <Hero />
       <AboutUs />
       <ModuleCategories />
-      <CampusReservationMap />
+      {/* <CampusReservationMap /> */}
       <ReconLogs />
       <Testimonials />
       <RegistrationBanner />
