@@ -42,7 +42,10 @@ const eventJsonLd = {
     name: "FAST NUCES Karachi",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "ST-4 Sector 17-D, NH 5", 
       addressLocality: "Karachi",
+      addressRegion: "Sindh", 
+      postalCode: "75030",
       addressCountry: "PK",
     },
   },

@@ -14,8 +14,10 @@ import SplashProvider from "@/components/SplashProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 import PageTransition from "@/components/PageTransition";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.devday26.com";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.devday26.com"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,

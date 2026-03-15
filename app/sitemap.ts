@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 
-const siteUrl = "https://www.devday26.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.devday26.com";
 
 const staticRoutes = [
   "",
