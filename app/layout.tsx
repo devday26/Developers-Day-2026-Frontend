@@ -15,6 +15,8 @@ import SmoothScroll from "@/components/SmoothScroll";
 import PageTransition from "@/components/PageTransition";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.devday26.com";
+const isProduction =
+  process.env.VERCEL_ENV === "production" || siteUrl === "https://www.devday26.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -23,6 +25,10 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  robots: {
+    index: isProduction,
+    follow: isProduction,
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
