@@ -100,6 +100,50 @@ function formatModuleTitle(rawTitle: string) {
     return rawTitle.replace(/_/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function buildModuleJsonLd(moduleId: string, moduleTitle: string, moduleDescription: string) {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.devday26.com";
+    const moduleUrl = `${siteUrl}/modules/${moduleId}`;
+
+    return {
+        breadcrumb: {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+                {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: siteUrl,
+                },
+                {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "Modules",
+                    item: `${siteUrl}/modules`,
+                },
+                {
+                    "@type": "ListItem",
+                    position: 3,
+                    name: moduleTitle,
+                    item: moduleUrl,
+                },
+            ],
+        },
+        collection: {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: `${moduleTitle} Competitions`,
+            description: moduleDescription,
+            url: moduleUrl,
+            isPartOf: {
+                "@type": "WebSite",
+                name: "Developer's Day 2026",
+                url: siteUrl,
+            },
+        },
+    };
+}
+
 export async function generateMetadata({
     params,
 }: {
@@ -189,6 +233,10 @@ export default async function ModulePage({
         );
     }
 
+    const moduleTitle = formatModuleTitle(selectedModule.title);
+    const moduleDescription = `${moduleTitle} competitions at Developer's Day 2026. ${selectedModule.categoryDescription[0]}`;
+    const moduleJsonLd = buildModuleJsonLd(moduleId, moduleTitle, moduleDescription);
+
     const competitions = await getCompetitions();
     const category = idToCategoryMap[moduleId];
     const categoryCompetitions = competitions.filter(
@@ -196,6 +244,14 @@ export default async function ModulePage({
     );
     return (
         <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(moduleJsonLd.breadcrumb) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(moduleJsonLd.collection) }}
+            />
             <ModuleCompetitions {...selectedModule} categoryCompetitions={categoryCompetitions} />
             <RegistrationBanner />
         </>
