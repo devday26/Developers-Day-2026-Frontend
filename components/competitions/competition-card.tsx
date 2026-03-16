@@ -2,16 +2,19 @@
 
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
-import { UserGroupIcon, BanknotesIcon, CalendarDaysIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
+import { UserGroupIcon, BanknotesIcon, CalendarDaysIcon, InformationCircleIcon, DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 export interface CompetitionCardProps {
+  id: string;
   title: string;
   description: string;
   minTeamSize: number;
   maxTeamSize: number;
   startTime?: string | null;
   endTime?: string | null;
+  ruleBookUrl?: string;
   capacityLimit: number;
   earlyBirdLimit: number;
   earlyBirdPrice: number;
@@ -20,12 +23,14 @@ export interface CompetitionCardProps {
 }
 
 export default function CompetitionCard({
+  id,
   title,
   description,
   minTeamSize,
   maxTeamSize,
   startTime,
   endTime,
+  ruleBookUrl,
   earlyBirdLimit,
   earlyBirdPrice,
   capacityLimit,
@@ -114,13 +119,25 @@ export default function CompetitionCard({
   const scheduleDate = formatScheduleDate(startTime);
   const scheduleTime = formatScheduleTime(startTime, endTime);
 
+  useEffect(() => {
+    if (id && typeof window !== "undefined" && window.location.hash === `#${id}`) {
+      const timeout = setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [id]);
+
   return (
     <motion.div
       className="flex flex-col h-full overflow-hidden bg-[#111214] border-[0.25px] border-[#333333]"
       whileHover={{ y: -4, transition: { duration: 0.25 } }}
     >
       {/* Title */}
-      <div className="bg-[#1A1A1A] border border-[#333333] p-4 flex-shrink-0">
+      <div id={id} className="bg-[#1A1A1A] border border-[#333333] p-4 flex-shrink-0">
         <h2 className="text-white text-2xl font-bold uppercase tracking-wide">
           {title}
         </h2>
@@ -151,7 +168,7 @@ export default function CompetitionCard({
         )}
 
         {/* Info Row */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-4 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
           {/* Team Size */}
           <div className="bg-[#1A1A1A] p-3 w-full border border-[#FFFFFF0D] border-l-2 border-l-[var(--color,#2563EB)] flex flex-col items-baseline gap-2">
             <UserGroupIcon className="w-4 h-4 text-[var(--color,#2563EB)]" />
@@ -189,10 +206,22 @@ export default function CompetitionCard({
             </div>
           </div>
 
-          {/* <div className="cursor-pointer hover:bg-white/10 p-3 w-full border-2 border-[var(--color,#2563EB)] flex items-center justify-between sm:justify-center gap-2 px-5">
-            <span className="text-white font-bold sm:font-normal text-sm">RULEBOOK</span>
-            <DocumentArrowDownIcon className="w-5 h-5 text-[var(--color,#2563EB)]" />
-          </div> */}
+          {ruleBookUrl ? (
+            <a
+              href={ruleBookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer bg-[#1A1A1A] hover:bg-white/10 p-3 w-full border border-[#FFFFFF0D] border-l-2 border-l-[var(--color,#2563EB)] flex items-center justify-between sm:justify-center gap-2 px-5"
+            >
+              <span className="text-white font-bold sm:font-normal text-sm">RULEBOOK</span>
+              <DocumentArrowDownIcon className="w-5 h-5 text-[var(--color,#2563EB)]" />
+            </a>
+          ) : (
+            <div className="bg-[#1A1A1A] p-3 w-full border border-[#FFFFFF0D] border-l-2 border-l-[var(--color,#2563EB)] flex items-center justify-between sm:justify-center gap-2 px-5 opacity-50 cursor-not-allowed">
+              <span className="text-white font-bold sm:font-normal text-sm">RULEBOOK</span>
+              <DocumentArrowDownIcon className="w-5 h-5 text-[var(--color,#2563EB)]" />
+            </div>
+          )}
 
         </div>
         {/* Register Button */}

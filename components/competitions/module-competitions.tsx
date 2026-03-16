@@ -13,6 +13,7 @@ type Competition = {
   description: string;
   capacityLimit: number;
   earlyBirdLimit: number;
+  ruleBookUrl?: string;
   fee: number;
   earlyBirdFee: number;
   minTeamSize: number;
@@ -148,11 +149,13 @@ export default function ModuleCompetitions({
           {categoryCompetitions.map((comp: Competition) => (
             <motion.div key={comp.id} variants={cardVariants}>
               <CompetitionCard
+                id={comp.id}
                 title={comp.name}
                 description={comp.description}
                 minTeamSize={comp.minTeamSize}
                 maxTeamSize={comp.maxTeamSize}
                 startTime={comp.startTime}
+                ruleBookUrl={comp.ruleBookUrl}
                 endTime={comp.endTime}
                 capacityLimit={comp.capacityLimit}
                 earlyBirdLimit={comp.earlyBirdLimit}
