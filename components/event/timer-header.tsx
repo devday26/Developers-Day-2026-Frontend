@@ -8,13 +8,13 @@ export default function TimeHeader() {
             {TIME_LABELS.map((time, index) => (
                 <div
                     key={time}
-                    className={`sm:-translate-x-[20%] -translate-x-[40%] text-xs text-gray-500 ${index % 2 !== 0 ? 'hidden md:block' : ''}`}
+                    className={`sm:-translate-x-[20%] -translate-x-[40%]  text-[9px] sm:text-xs text-gray-500 ${index % 2 !== 0 ? 'hidden md:block' : ''}`}
                 >
                     {time}
                 </div>
             ))}
 
-            <div className="absolute right-0 translate-x-[50%] text-xs text-gray-500">
+            <div className="absolute right-0 translate-x-[50%] text-[9px] sm:text-xs text-gray-500">
                 16:00
             </div>
         </div>

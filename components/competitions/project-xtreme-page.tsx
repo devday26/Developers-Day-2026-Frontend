@@ -205,10 +205,10 @@ export default function ProjectXtremePage() {
                   key={panel.id}
                   className="bg-[#111214] border border-[#2E3642] overflow-hidden"
                 >
-                  <div className="p-5 flex items-center justify-between gap-4">
+                  <div className="px-4 py-3 sm:p-5 flex items-center justify-between gap-4">
                     <div>
                       <h2 className="text-lg font-bold uppercase tracking-wide">{panel.title}</h2>
-                      <p className="text-sm text-gray-300 mt-1">{panel.short}</p>
+                      <p className="text-xs sm:text-sm text-gray-300 mt-1">{panel.short}</p>
                     </div>
                     <Button
                       isIconOnly
