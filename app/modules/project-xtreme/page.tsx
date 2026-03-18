@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import ProjectXtremePage from "@/components/competitions/project-xtreme-page";
+import { fetchCompetitionsWithCategory } from "@/lib/api/competitions";
+import type { CompetitionWithCategory } from "@/types/competitions";
 
 const title = "Project Xtreme | Developer's Day 2026";
 const description =
@@ -25,6 +27,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProjectXtremeRoutePage() {
-  return <ProjectXtremePage />;
+export default async function ProjectXtremeRoutePage() {
+  let initialCompetition: CompetitionWithCategory | null = null;
+  let initialError: string | null = null;
+
+  try {
+    const competitions = await fetchCompetitionsWithCategory();
+    initialCompetition =
+      competitions.find((comp) => comp.id === "comp-project-xtreme") || null;
+  } catch (error: any) {
+    initialError =
+      error?.message || "Unable to load Project Xtreme details right now.";
+  }
+
+  return (
+    <ProjectXtremePage
+      initialCompetition={initialCompetition}
+      initialError={initialError}
+    />
+  );
 }

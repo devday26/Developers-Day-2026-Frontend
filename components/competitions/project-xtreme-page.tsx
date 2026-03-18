@@ -1,9 +1,8 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@heroui/button";
 import CompetitionCard from "./competition-card";
-import { fetchCompetitionsWithCategory } from "@/lib/api/competitions";
 import type { CompetitionWithCategory } from "@/types/competitions";
 
 //basically 1 hi to competition hai
@@ -61,44 +60,31 @@ const projectXtremePanels: Info[] = [
   },
 ];
 
-export default function ProjectXtremePage() {
+interface ProjectXtremePageProps {
+  initialCompetition: CompetitionWithCategory | null;
+  initialError?: string | null;
+}
+
+export default function ProjectXtremePage({
+  initialCompetition,
+  initialError = null,
+}: ProjectXtremePageProps) {
 
   const [activePanelId, setActivePanelId] = useState<string | null>(null);
-  const [projectCompetition, setProjectCompetition] = useState<CompetitionWithCategory | null>(null);
-  const [competitionError, setCompetitionError] = useState<string | null>(null);
+  const projectCompetition = initialCompetition;
+  const competitionError = initialError;
 
   const activePanel = useMemo(
     () => projectXtremePanels.find((panel) => panel.id === activePanelId) || null,
     [activePanelId]
   );
 
-  useEffect(() => {
-    let isMounted = true;//glow bohot hai yar isko kam karna hai
-    (async () => {
-      try {
-        //console.log("here i am");
-        const competitions = await fetchCompetitionsWithCategory();
-        if (!isMounted) return;
-
-        const projectXtreme = competitions.find((comp) => comp.id === "comp-project-xtreme") || null;
-        setProjectCompetition(projectXtreme);
-      } catch (error: any) {
-        if (!isMounted) return;
-        setCompetitionError(error?.message || "Unable to load Project Xtreme details right now.");
-      }
-    })();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
   const cardDescription = projectCompetition?.description?.trim()
     ? projectCompetition.description
     : "Show your project or FYP to an industry audience, receive direct expert feedback, and position your team for real opportunities. Project Xtreme is where your student idea is treated like the next serious product.";
   //wah kia pheku description laya hu may
 
-  const competitionId = projectCompetition?.id;
+  const competitionId = projectCompetition?.id || "comp-project-xtreme";
 
   //redirect copied from asfand
   const registerHref = `/register?competition=${competitionId}&category=Project%20Xtreme`;
