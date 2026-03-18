@@ -58,23 +58,20 @@ const projectXtremePanels: Info[] = [
 ];
 
 interface ProjectXtremePageProps {
-  initialCompetition: CompetitionWithCategory | null;
-  initialError?: string | null;
+  initialCompetition: CompetitionWithCategory;
 }
 
 export default function ProjectXtremePage({
   initialCompetition,
-  initialError = null,
 }: ProjectXtremePageProps) {
   const [activePanelId, setActivePanelId] = useState<string | null>(null);
   const projectCompetition = initialCompetition;
-  const competitionError = initialError;
 
   const cardDescription = projectCompetition?.description?.trim()
     ? projectCompetition.description
     : "Show your project or FYP to an industry audience, receive direct expert feedback, and position your team for real opportunities. Project Xtreme is where your student idea is treated like the next serious product.";
 
-  const competitionId = projectCompetition?.id || "comp-project-xtreme";
+  const competitionId = projectCompetition.id;
   const registerHref = `/register?competition=${competitionId}&category=project-xtreme`;
 
   return (
@@ -162,19 +159,16 @@ export default function ProjectXtremePage({
               id="project-xtreme"
               title="Project Xtreme"
               description={cardDescription}
-              minTeamSize={projectCompetition?.minTeamSize ?? 1}
-              maxTeamSize={projectCompetition?.maxTeamSize ?? 5}
-              startTime={projectCompetition?.startTime ?? null}
-              endTime={projectCompetition?.endTime ?? null}
-              capacityLimit={projectCompetition?.capacityLimit ?? 1}
-              earlyBirdLimit={projectCompetition?.earlyBirdLimit ?? 0}
-              earlyBirdPrice={projectCompetition?.earlyBirdFee ?? 0}
-              normalPrice={projectCompetition?.fee ?? 0}
+              minTeamSize={projectCompetition.minTeamSize}
+              maxTeamSize={projectCompetition.maxTeamSize}
+              startTime={projectCompetition.startTime ?? null}
+              endTime={projectCompetition.endTime ?? null}
+              capacityLimit={projectCompetition.capacityLimit}
+              earlyBirdLimit={projectCompetition.earlyBirdLimit}
+              earlyBirdPrice={projectCompetition.earlyBirdFee}
+              normalPrice={projectCompetition.fee}
               registerHref={registerHref}
             />
-            {competitionError && (
-              <p className="text-xs text-red-300 mt-3 uppercase tracking-wider">{competitionError}</p>
-            )}
           </motion.div>
 
           {/* RIGHT — expands independently */}

@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import ProjectXtremePage from "@/components/competitions/project-xtreme-page";
-import { fetchCompetitionsWithCategory } from "@/lib/api/competitions";
 import type { CompetitionWithCategory } from "@/types/competitions";
 
 const title = "Project Xtreme | Developer's Day 2026";
@@ -27,23 +26,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function ProjectXtremeRoutePage() {
-  let initialCompetition: CompetitionWithCategory | null = null;
-  let initialError: string | null = null;
+async function getProjectXtremeCompetition(): Promise<CompetitionWithCategory> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/competitions/public`,
+    { next: { revalidate: 600 } }
+  );
 
-  try {
-    const competitions = await fetchCompetitionsWithCategory();
-    initialCompetition =
-      competitions.find((comp) => comp.id === "comp-project-xtreme") || null;
-  } catch (error: any) {
-    initialError =
-      error?.message || "Unable to load Project Xtreme details right now.";
+  if (!res.ok) {
+    throw new Error(`API returned ${res.status}: ${res.statusText}`);
   }
 
-  return (
-    <ProjectXtremePage
-      initialCompetition={initialCompetition}
-      initialError={initialError}
-    />
-  );
+  const data = await res.json();
+  const competitions = (data?.data || []) as CompetitionWithCategory[];
+  const projectXtreme = competitions.find((comp) => comp.id === "comp-project-xtreme");
+
+  if (!projectXtreme) {
+    throw new Error("Project Xtreme competition not found.");
+  }
+
+  return projectXtreme;
+}
+
+export default async function ProjectXtremeRoutePage() {
+  const initialCompetition = await getProjectXtremeCompetition();
+  return <ProjectXtremePage initialCompetition={initialCompetition} />;
 }
