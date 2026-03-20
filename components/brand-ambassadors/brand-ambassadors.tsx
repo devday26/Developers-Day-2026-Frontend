@@ -26,7 +26,10 @@ export default function BrandAmbassadors({ brandAmbassadors }: BrandAmbassadorsP
     const [query, setQuery] = useState("");
 
     const sorted = useMemo(
-        () => [...brandAmbassadors].sort((a, b) => b.teamCount - a.teamCount),
+        () =>
+            [...brandAmbassadors]
+                .filter((a) => a.teamCount > 0)
+                .sort((a, b) => b.teamCount - a.teamCount),
         [brandAmbassadors]
     );
 

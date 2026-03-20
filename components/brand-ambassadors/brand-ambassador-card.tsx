@@ -32,7 +32,7 @@ export default function BrandAmbassadorCard({ ambassador, rank }: BrandAmbassado
             <div className="absolute bottom-3 left-3 border-l-2 border-b-2 border-[#6E1617] h-6 w-6" />
 
             {/* Rank + Name + Referral Code */}
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-4 sm:gap-6">
                 <span className="text-4xl sm:text-5xl font-extralight text-[#6E1617] w-8 sm:w-10 text-center shrink-0">
                     {rank}
                 </span>
