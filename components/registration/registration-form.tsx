@@ -836,23 +836,7 @@ export default function RegistrationForm() {
                                 />
                             </div>
                             <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">02 (OPTIONAL)</label>
-                                <Input
-                                    placeholder="REFERENCE_CODE (AKH677)"
-                                    value={formData.referenceCode}
-                                    onValueChange={(value) => updateFormData("referenceCode", value)}
-                                    classNames={{
-                                        input: "bg-dark-red text-white placeholder:text-gray-600 text-xs",
-                                        inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
-                                    }}
-                                    radius="none"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">03</label>
+                                <label className="text-red-primary text-xs font-mono mb-2 block">02</label>
                                 <Select
                                     placeholder="MODULE_CATEGORY"
                                     selectedKeys={selectedCategory ? [selectedCategory] : []}
@@ -886,8 +870,11 @@ export default function RegistrationForm() {
                                     }
                                 </Select>
                             </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">04</label>
+                                <label className="text-red-primary text-xs font-mono mb-2 block">03</label>
                                 <Select
                                     placeholder={
                                         isLoadingCompetitions
@@ -956,6 +943,19 @@ export default function RegistrationForm() {
                                         );
                                     })}
                                 </Select>
+                            </div>
+                            <div>
+                                <label className="text-red-primary text-xs font-mono mb-2 block">04 (OPTIONAL)</label>
+                                <Input
+                                    placeholder="REFERENCE_CODE (AKH677)"
+                                    value={formData.referenceCode}
+                                    onValueChange={(value) => updateFormData("referenceCode", value)}
+                                    classNames={{
+                                        input: "bg-dark-red text-white placeholder:text-gray-600 text-xs",
+                                        inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
+                                    }}
+                                    radius="none"
+                                />
                             </div>
                         </div>
 
