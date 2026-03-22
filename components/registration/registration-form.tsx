@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import Link from "next/link";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { useSearchParams } from 'next/navigation'
@@ -766,6 +767,49 @@ export default function RegistrationForm() {
         );
     }
 
+    if (isLoadingCompetitions) {
+        //jab tak response nahe ata show skeleton takay user ko wait na karna paray
+
+        return (
+            <div className="space-y-8 animate-pulse">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 mb-8">
+                    {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="bg-dark-red-1 relative pl-4 md:pl-6 pr-2 md:pr-4 py-3 md:py-6">
+                            <div className="absolute left-0 top-0 h-full w-[6px] md:w-[8px] bg-red-primary" />
+                            <div className="h-2 w-16 bg-gray-700 rounded mb-2" />
+                            <div className="h-3 w-24 bg-gray-800 rounded" />
+                        </div>
+                    ))}
+                </div>
+
+                
+                <div className="bg-dark-red-1 border border-gray-800 p-6 md:p-8 space-y-6">
+                    <div className="h-7 w-56 bg-gray-700 rounded mb-6" />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="h-[56px] bg-gray-800 border-2 border-gray-700 rounded-none" />
+                        <div className="h-[56px] bg-gray-800 border-2 border-gray-700 rounded-none" />
+                    </div>
+
+                 
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="h-[56px] bg-gray-800 border-2 border-gray-700 rounded-none" />
+                        <div className="h-[56px] bg-gray-800 border-2 border-gray-700 rounded-none" />
+                    </div>
+
+                   
+                    <div className="flex justify-end pt-4">
+                        <div className="h-10 w-36 bg-gray-700 rounded-none" />
+                    </div>
+                </div>
+
+                <p className="text-center text-xs font-mono text-gray-600 tracking-widest">
+                    LOADING_COMPETITIONS...
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-8">
             <Script
@@ -836,23 +880,7 @@ export default function RegistrationForm() {
                                 />
                             </div>
                             <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">02 (OPTIONAL)</label>
-                                <Input
-                                    placeholder="REFERENCE_CODE (AKH677)"
-                                    value={formData.referenceCode}
-                                    onValueChange={(value) => updateFormData("referenceCode", value)}
-                                    classNames={{
-                                        input: "bg-dark-red text-white placeholder:text-gray-600 text-xs",
-                                        inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
-                                    }}
-                                    radius="none"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">03</label>
+                                <label className="text-red-primary text-xs font-mono mb-2 block">02</label>
                                 <Select
                                     placeholder="MODULE_CATEGORY"
                                     selectedKeys={selectedCategory ? [selectedCategory] : []}
@@ -886,8 +914,11 @@ export default function RegistrationForm() {
                                     }
                                 </Select>
                             </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="text-red-primary text-xs font-mono mb-2 block">04</label>
+                                <label className="text-red-primary text-xs font-mono mb-2 block">03</label>
                                 <Select
                                     placeholder={
                                         isLoadingCompetitions
@@ -956,6 +987,26 @@ export default function RegistrationForm() {
                                         );
                                     })}
                                 </Select>
+                            </div>
+                            <div>
+                                <label className="text-red-primary text-xs font-mono mb-2 block">04 (OPTIONAL)</label>
+                                <Input
+                                    placeholder="REFERENCE_CODE (AKH677)"
+                                    value={formData.referenceCode}
+                                    onValueChange={(value) => updateFormData("referenceCode", value)}
+                                    classNames={{
+                                        input: "bg-dark-red text-white placeholder:text-gray-600 text-xs",
+                                        inputWrapper: "bg-dark-red border-2 border-gray-800 hover:border-gray-700 h-[56px]",
+                                    }}
+                                    radius="none"
+                                />
+                                <Link
+                                    href="/brand-ambassadors"
+                                    target="_blank"
+                                    className="mt-2 inline-block text-[11px] font-mono text-red-primary hover:text-white transition-colors duration-200 underline underline-offset-2"
+                                >
+                                    View Live Brand Ambassador Ranking ↗
+                                </Link>
                             </div>
                         </div>
 
